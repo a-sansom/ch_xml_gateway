@@ -1,7 +1,7 @@
 <?php if ($error): ?>
- <p>
+ <div>
    Error: <?php print $error ?>
- </p>
+ </div>
 <?php endif; ?>
 
 <?php if ($companyAppointments): ?>
@@ -23,6 +23,9 @@
       </div>
       <div>
         No. current appointments: <?php print $companyAppointments['num_current_appt'] ?>
+      </div>
+      <div>
+        Has resigned appointments: <?php print $companyAppointments['has_resigned_appt'] ?>
       </div>
       <div>
         Search rows: <?php print $companyAppointments['search_rows'] ?>

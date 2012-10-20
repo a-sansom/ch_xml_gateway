@@ -1,7 +1,7 @@
+;$Id$
 name = "Companies House XML Gateway"
 description = "Enable Drupal to query the Companies House XML gateway via the php-govtalk library."
-core = 7.x
-package = Other
-files[] = ch_xml_gateway.module
-files[] = lib/php-govtalk/GovTalk.php
-files[] = lib/php-govtalk/extensions/CompaniesHouse/CompaniesHouse.php
+package = "Custom modules"
+version = "6.x-1.0"
+core = 6.x
+php = 5.2

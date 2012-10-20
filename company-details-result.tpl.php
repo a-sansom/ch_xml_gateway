@@ -1,7 +1,7 @@
 <?php if ($error): ?>
-  <p>
+  <div>
     Error: <?php print $error ?>
-  </p>
+  </div>
 <?php endif; ?>
 
 <?php if ($companyDetails): ?>

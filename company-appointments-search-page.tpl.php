@@ -1,6 +1,6 @@
-<p>
+<div>
   Search for a list of company appointments, by their Companies House company number.
-</p>
+</div>
 <div>
   <?php print $form ?>
 </div>

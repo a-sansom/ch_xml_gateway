@@ -1,8 +1,7 @@
 <?php
 /**
 * @file
-* Install file to insert/remove various 'variable' table values used by the
-* module as well as create any database tables.
+* Install file to insert/remove various 'variable' table values used by the module. 
 *
 */
 
@@ -24,11 +23,14 @@ function ch_xml_gateway_install() {
   variable_set('ch_xml_gateway_form_settings_OfficerSearch_show_officer_type', '0');
   variable_set('ch_xml_gateway_form_settings_OfficerSearch_show_include_resigned', '0');
   variable_set('ch_xml_gateway_form_settings_all_ajax_searches', '1');
+  drupal_install_schema('ch_xml_gateway');
 }
 
 /*
  * Implementation of hook_uninstall()
  *
+ * TODO: Remove entries in 'blocks' table for this module?
+ * TODO: Uninstall of any tables to be optional?
  */
 function ch_xml_gateway_uninstall() {
   variable_del('ch_xml_gateway_user');
@@ -45,6 +47,7 @@ function ch_xml_gateway_uninstall() {
   variable_del('ch_xml_gateway_form_settings_OfficerSearch_show_officer_type');
   variable_del('ch_xml_gateway_form_settings_OfficerSearch_show_include_resigned');
   variable_del('ch_xml_gateway_form_settings_all_ajax_searches');
+  drupal_uninstall_schema('ch_xml_gateway');
 }
 
 /*

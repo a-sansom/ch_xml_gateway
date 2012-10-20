@@ -1,6 +1,6 @@
-<p>
+<div>
   Search for a company, by their Companies House company number.
-</p>
+</div>
 <div>
   <?php print $form ?>
 </div>

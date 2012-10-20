@@ -28,9 +28,13 @@
 
 /* Element holds the JSON response data */
 #selected-appointment-detail {
+  float: right;
+  position: relative;
+  width: 49%;
 }
 /* Element generated in script and inserted into #selected-appointment-detail */
 #dynamic-appointments-container {
+  border: 1px solid #000;
 }
 .dynamic-appointment-appointments-company-header,
 .dynamic-appointment-appointments-header {

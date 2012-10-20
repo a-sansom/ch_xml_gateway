@@ -1,6 +1,10 @@
 <?php
-/**
- * Implements hook_help()
+// Make the php-govtalk library available in the module
+include(drupal_get_path('module', 'ch_xml_gateway') . '/lib/php-govtalk/GovTalk.php');
+include(drupal_get_path('module', 'ch_xml_gateway') . '/lib/php-govtalk/extensions/CompaniesHouse/CompaniesHouse.php');
+
+/*
+ * Implementation of hook_help()
  */
 function ch_xml_gateway_help($path, $arg) {
   if ($path == 'admin/help#ch_xml_gateway') {
@@ -15,7 +19,7 @@ function ch_xml_gateway_help($path, $arg) {
     . '<li>' . l('Company appointments search (by CH company number)', 'chxmlgw/appointments-search') . '</li>'
     . '<li>' . l('User gateway usage history', 'chxmlgw/gateway-history/user/' . $user->uid) . '</li>'
     . '</ul>'
-    . '<p>You will need to configure ' . l('module permissions', 'admin/people/permissions') . ' so that users can access the gateway.</p>'
+    . '<p>You will need to configure ' . l('module permissions', 'admin/user/permissions') . ' so that users can access the gateway.</p>'
     . '<p>Users can view their gateway usage history via a link on theor account page. Apart from user id=1, users cannot view other users history.</p>'
     . '<p>Information about the XML Gateway can be found at ' . l('http://xmlgw.companieshouse.gov.uk/', 'http://xmlgw.companieshouse.gov.uk/')
     . ' and information about the php-govtalk library can be found at ' . l('http://code.google.com/p/php-govtalk/', 'http://code.google.com/p/php-govtalk/') . '.</p>'
@@ -24,57 +28,42 @@ function ch_xml_gateway_help($path, $arg) {
   }
 }
 
-/**
- * Implements hook_permission()
+/*
+ * Implementation of hook_perm()
  */
-function ch_xml_gateway_permission() {
+function ch_xml_gateway_perm() {
   return array(
-    'query namesearch' => array(
-      'title' => 'Query NameSearch',
-      'description' => 'Allow user to query the NameSearch service',
-    ),
-    'query companydetails' => array(
-      'title' => 'Query CompanyDetails',
-      'description' => 'Allow user to query the CompanyDetails service',
-    ),
-    'query companyappointments' => array(
-      'title' => 'Query CompanyAppointments',
-      'description' => 'Allow user to query the CompanyAppointments service',
-    ),
-    'query officersearch' => array(
-      'title' => 'Query OfficerSearch',
-      'description' => 'Allow user to query the OfficerSearch service',
-    ),
-    'query officerdetails' => array(
-      'title' => 'Query OfficerDetails',
-      'description' => 'Allow user to query the OfficerDetails service',
-    ),
+    'Query NameSearch',
+    'Query CompanyDetails',
+    'Query CompanyAppointments',
+    'Query OfficerSearch',
+    'Query OfficerDetails',
   );
 }
 
-/**
- * Implements hook_menu()
+/*
+ * Implementation of hook_menu()
  */
 function ch_xml_gateway_menu() {
   // Admin settings
-  $items['admin/config/services/chxmlgw'] = array(
+  $items['admin/settings/chxmlgw'] = array(
     'title' => 'Companies House XML Gateway',
     'title callback' => 't',
-    'description' => 'Settings affecting interaction with XML gateway.',
+    'description' => t('Settings affecting interaction with XML gateway.'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('_module_settings_form'),
     'access arguments' => array('administer users'),
     'type' => MENU_NORMAL_ITEM,
   );
 
-  // Admin default tab (inherits 'admin/config/services/chxmlgw' page callback)
-  $items['admin/config/services/chxmlgw/gateway-options'] = array(
+  // Admin default tab (inherits 'admin/settings/chxmlgw' page callback)
+  $items['admin/settings/chxmlgw/gateway-options'] = array(
     'title' => 'Gateway Options',
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
   
   // Admin search form(s) options tab
-  $items['admin/config/services/chxmlgw/search-form-options'] = array(
+  $items['admin/settings/chxmlgw/search-form-options'] = array(
     'title' => 'Search Form Options',
     'title callback' => 't',
     'page callback' => '_search_form_options_page',
@@ -91,7 +80,7 @@ function ch_xml_gateway_menu() {
     'page callback' => '_officer_search_page',
     'page arguments' => '',
     'access callback' => 'user_access',
-    'access arguments' => array('query officersearch'),
+    'access arguments' => array('Query OfficerSearch'),
     'type' => MENU_NORMAL_ITEM,
   );
   
@@ -102,7 +91,7 @@ function ch_xml_gateway_menu() {
     'page callback' => '_officer_search_result_page',
     'page arguments' => '',
     'access callback' => 'user_access',
-    'access arguments' => array('query officersearch'),
+    'access arguments' => array('Query OfficerSearch'),
     'type' => MENU_CALLBACK,
   );
   
@@ -114,7 +103,7 @@ function ch_xml_gateway_menu() {
     'page callback' => '_officer_details_page',
     'page arguments' =>  array(2),
     'access callback' => 'user_access',
-    'access arguments' => array('query officerdetails'),
+    'access arguments' => array('Query OfficerDetails'),
     'type' => MENU_CALLBACK,
   );
 
@@ -124,7 +113,7 @@ function ch_xml_gateway_menu() {
     'page callback' => '_officer_details_json',
     'page arguments' =>  array(3),
     'access callback' => 'user_access',
-    'access arguments' => array('query officerdetails'),
+    'access arguments' => array('Query OfficerDetails'),
     'type' => MENU_CALLBACK,
   );
   
@@ -135,7 +124,7 @@ function ch_xml_gateway_menu() {
     'page callback' => '_company_search_page',
     'page arguments' => '',
     'access callback' => 'user_access',
-    'access arguments' => array('query namesearch'),
+    'access arguments' => array('Query NameSearch'),
     'type' => MENU_NORMAL_ITEM,
   );
   
@@ -146,7 +135,7 @@ function ch_xml_gateway_menu() {
     'page callback' => '_company_search_result_page',
     'page arguments' => array(2),
     'access callback' => 'user_access',
-    'access arguments' => array('query namesearch'),
+    'access arguments' => array('Query NameSearch'),
     'type' => MENU_CALLBACK,
   );
   
@@ -158,7 +147,7 @@ function ch_xml_gateway_menu() {
     'page callback' => '_company_details_page',
     'page arguments' => '',
     'access callback' => 'user_access',
-    'access arguments' => array('query companydetails'),
+    'access arguments' => array('Query CompanyDetails'),
     'type' => MENU_CALLBACK,
   );
 
@@ -169,7 +158,7 @@ function ch_xml_gateway_menu() {
     'page callback' => '_company_details_result_page',
     'page arguments' => array(2),
     'access callback' => 'user_access',
-    'access arguments' => array('query companydetails'),
+    'access arguments' => array('Query CompanyDetails'),
     'type' => MENU_CALLBACK,
   );
   
@@ -180,7 +169,7 @@ function ch_xml_gateway_menu() {
     'page callback' => '_company_appointments_search_page',
     'page arguments' => '',
     'access callback' => 'user_access',
-    'access arguments' => array('query companyappointments'),
+    'access arguments' => array('Query CompanyAppointments'),
     'type' => MENU_CALLBACK,
   );
   
@@ -192,15 +181,14 @@ function ch_xml_gateway_menu() {
     'page callback' => '_appointments_search_result_page',
     'page arguments' => array(2),
     'access callback' => 'user_access',
-    'access arguments' => array('query companyappointments'),
+    'access arguments' => array('Query CompanyAppointments'),
     'type' => MENU_CALLBACK,
   );
 
   // Show history of a users gateway usage
   $items['chxmlgw/gateway-history/user/%'] = array(
-    'title' => '',
-    'title callback' => '_gateway_history_page_title',
-    'title arguments' => array(3),
+    'title' => 'Your Companies House XML Gateway usage',
+    'title callback' => 't',
     'page callback' => '_user_gateway_history_page',
     'page arguments' => array(3),
     'access callback' => '_gateway_history_page_access',
@@ -222,73 +210,66 @@ function ch_xml_gateway_menu() {
   return $items;
 }
 
-/**
- * Implements hook_block_info()
+/*
+ * Implementation of hook_block()
  */
-function ch_xml_gateway_block_info() {
-  $blocks = array();
+function ch_xml_gateway_block($op='list', $delta=0, $edit=array()) {
 
-  $blocks['ch-xml-gateway-company-search'] = array(
-    'info' => t('Companies House XML Gateway: Company Search'),
-  );
-  $blocks['ch-xml-gateway-company-details'] = array(
-    'info' => t('Companies House XML Gateway: Company Details'),
-  );
-  $blocks['ch-xml-gateway-company-appts'] = array(
-    'info' => t('Companies House XML Gateway: Company Appointments'),
-  );
-  $blocks['ch-xml-gateway-officer-search'] = array(
-    'info' => t('Companies House XML Gateway: Officer Search'),
-  );
+  switch ($op) {
+    // List blocks provided by module
+    case 'list';
+      $blocks['ch-xml-gateway-company-search'] = array(
+        'info' => t('Companies House XML Gateway: Company Search'),
+      );
+      $blocks['ch-xml-gateway-company-details'] = array(
+        'info' => t('Companies House XML Gateway: Company Details'),
+      );
+      $blocks['ch-xml-gateway-company-appts'] = array(
+        'info' => t('Companies House XML Gateway: Company Appointments'),
+      );
+      $blocks['ch-xml-gateway-officer-search'] = array(
+        'info' => t('Companies House XML Gateway: Officer Search'),
+      );
 
-  return $blocks;
+      return $blocks;
+
+    // Content to display
+    case 'view';
+      switch ($delta) {
+        case 'ch-xml-gateway-company-search':
+          $block['subject'] = t('NameSearch');
+          $block['content'] = drupal_get_form('_company_search_form');
+          break;
+
+        case 'ch-xml-gateway-company-details':
+          $block['subject'] = t('CompanyDetails');
+          $block['content'] = drupal_get_form('_company_details_form');
+          break;
+        
+        case 'ch-xml-gateway-company-appts':
+          $block['subject'] = t('CompanyAppointments');
+          $block['content'] = drupal_get_form('_appointments_search_form');
+          break;
+
+        case 'ch-xml-gateway-officer-search':
+          $block['subject'] = t('OfficerSearch');
+          $block['content'] = drupal_get_form('_officer_search_form',  array('form_instructions' => '', 'single_name' => 1, 'show_all_forename' => 0, 'show_town' => 0, 'show_officer_type' => 0, 'show_resigned_ind' => 0, ));
+          break;
+        }
+
+      return $block;
+  }
 }
 
-/**
- * Implements hook_block_view()
- *
- * Blocks are only visible if the user has permission to user the 
- * service the block contains the form for.
+/*
+ * Implementation of hook_user()
  */
-function ch_xml_gateway_block_view($delta = '') {
-  $block = array();
-  if ($delta === 'ch-xml-gateway-company-search') {
-    if (user_access('query namesearch')) {
-      $block['subject'] = t('NameSearch');
-      $block['content'] = drupal_get_form('_company_search_form');
-    }
-  }
-  elseif ($delta === 'ch-xml-gateway-company-details') {
-    if (user_access('query companydetails')) {
-      $block['subject'] = t('CompanyDetails');
-      $block['content'] = drupal_get_form('_company_details_form');
-    }
-  }
-  elseif ($delta === 'ch-xml-gateway-company-appts') {
-    if (user_access('query companyappointments')) {
-      $block['subject'] = t('CompanyAppointments');
-      $block['content'] = drupal_get_form('_appointments_search_form');
-    }
-  }
-  elseif ($delta === 'ch-xml-gateway-officer-search') {
-    if (user_access('query officersearch')) {
-      $block['subject'] = t('OfficerSearch');
-      $block['content'] = drupal_get_form('_officer_search_form',  array('form_instructions' => '', 'single_name' => 1, 'show_all_forename' => 0, 'show_town' => 0, 'show_officer_type' => 0, 'show_resigned_ind' => 0, ));
-    }
-  }
-
-  return $block;
-}
-
-/**
- * Implements hook_user_view()
- */
-function ch_xml_gateway_user_view($account, $view_mode, $langcode) {
-  if ($view_mode == 'full') {
+function ch_xml_gateway_user($op, &$edit, &$account, $category = NULL) {
+  if ($op == 'view') {
     $account->content['summary']['chxmlgw'] = array(
       '#type' => 'user_profile_item',
-      '#title' => t('Companies House XML Gateway'),
-      '#markup' => l('View your gateway searches', 'chxmlgw/gateway-history/user/' . $account->uid),
+      '#title' => 'Companies House XML Gateway',
+      '#value' => l('View your gateway searches', 'chxmlgw/gateway-history/user/' . $account->uid),
     );
   }
 }
@@ -453,7 +434,7 @@ function _module_settings_form_submit($form, &$form_state) {
  * @return
  * Form as per the Drupal form API.
  */
-function _company_search_form($form, &$form_state) {
+function _company_search_form() {
   $form['alpha_key'] = array(
     '#type' => 'textfield',
     '#title' => t('Company name'),
@@ -492,7 +473,7 @@ function _company_search_form_submit($form, &$form_state) {
  * @return
  * Form as per the Drupal form API.
  */
-function _appointments_search_form($form, &$form_state) {
+function _appointments_search_form() {
   $form['company_number'] = array(
     '#type' => 'textfield',
     '#title' => t('Company number'),
@@ -537,7 +518,7 @@ function _appointments_search_form_submit($form, &$form_state) {
  * @return
  * Form as per the Drupal form API.
  */
-function _company_details_form($form, &$form_state) {
+function _company_details_form() {
   $form['company_number'] = array(
     '#type' => 'textfield',
     '#title' => t('Company number'),
@@ -592,7 +573,12 @@ function _company_details_form_submit($form, &$form_state) {
  * @return
  * Form defined as per the Drupal form API.
  */
-function _officer_search_form($form, &$form_state, $form_options = array('form_instructions' => '', 'single_name' => 1, 'show_all_forename' => 1, 'show_town' => 1, 'show_officer_type' => 1, 'show_resigned_ind' => 1, )) {
+function _officer_search_form($form_options = array('form_instructions' => '', 'single_name' => 1, 'show_all_forename' => 1, 'show_town' => 1, 'show_officer_type' => 1, 'show_resigned_ind' => 1, )) {
+  // TODO: Why's there not just the array passed in with the drupal_get_form() calls? Checkout FAPI.
+  // print_r(func_get_args());
+  // exit();
+  $args = func_get_args();
+
   // select/radio control options
   $options_zero_or_one = array(
     '1' => t('True'), 
@@ -606,16 +592,16 @@ function _officer_search_form($form, &$form_state, $form_options = array('form_i
     'EUR' => t('SE and ES appointments only'),
   );
     
-  if (!empty($form_options['form_instructions'])) {
+  if (!empty($args[1]['form_instructions'])) {
     $form['instructions'] = array(
       '#prefix' => '<div class="form-instructions">',
       '#suffix' => '</div>',
-      '#markup' => check_plain($form_options['form_instructions']),
+      '#value' => check_plain($args[1]['form_instructions']),
     );
   }
 
   // Single or multiple name inputs
-  if ($form_options['single_name'] == 1) {
+  if ($args[1]['single_name'] == 1) {
     $form['officer_name'] = array(
       '#type' => 'textfield',
       '#title' => t('Name'),
@@ -637,7 +623,7 @@ function _officer_search_form($form, &$form_state, $form_options = array('form_i
     );
       
     // Include in form if configured to
-    if ($form_options['show_all_forename'] == 1) {
+    if ($args[1]['show_all_forename'] == 1) {
       $form['officer_forename_2'] = array(
         '#type' => 'textfield',
         '#title' => t('Forename'),
@@ -659,7 +645,7 @@ function _officer_search_form($form, &$form_state, $form_options = array('form_i
   }
   
   // Include in form if configured to
-  if ($form_options['show_town'] == 1) {
+  if ($args[1]['show_town'] == 1) {
     $form['posttown'] = array(
       '#type' => 'textfield',
       '#title' => t('Town'),
@@ -671,7 +657,7 @@ function _officer_search_form($form, &$form_state, $form_options = array('form_i
   }
   
   // Include in form if configured to
-  if ($form_options['show_officer_type'] == 1) {
+  if ($args[1]['show_officer_type'] == 1) {
     $form['officer_type'] = array(
       '#type' => 'select',
       '#title' => t('Type'),
@@ -682,7 +668,7 @@ function _officer_search_form($form, &$form_state, $form_options = array('form_i
   }
 
   // Include in form if configured to
-  if ($form_options['show_resigned_ind'] == 1) {
+  if ($args[1]['show_resigned_ind'] == 1) {
     $form['include_resigned_ind'] = array(
       '#type' => 'radios',
       '#title' => t('Include resigned appointments?'),
@@ -714,41 +700,41 @@ function _officer_search_form_submit($form, &$form_state) {
     
   // Split single field into tokens, if it exists...
   if (array_key_exists('officer_name', $form_values)) {
-    $querystring['officer_name'] = $form_values['officer_name'];
+    $querystring[] = 'officer_name=' . $form_values['officer_name'];
   } 
   else {
     if (!empty($form_values['officer_forename_1'])) {
-      $querystring['forename_1'] = $form_values['officer_forename_1'];
+      $querystring[] = 'forename_1=' . $form_values['officer_forename_1'];
     }
         
     if (!empty($form_values['officer_forename_2'])) {
-      $querystring['forename_2'] = $form_values['officer_forename_2'];
+      $querystring[] = 'forename_2=' . $form_values['officer_forename_2'];
     }
         
     if (!empty($form_values['officer_surname'])) {
-      $querystring['surname'] = $form_values['officer_surname'];
+      $querystring[] = 'surname=' . $form_values['officer_surname'];
     }
   }
     
   if (!empty($form_values['posttown'])) {
-    $querystring['town'] = $form_values['posttown'];
+    $querystring[] = 'town=' . $form_values['posttown'];
   }
     
   if (!empty($form_values['officer_type'])) {
-    $querystring['type'] = $form_values['officer_type'];
+    $querystring[] = 'type=' . $form_values['officer_type'];
   } 
   else {
-    $querystring['type'] = variable_get('ch_xml_gateway_OfficerSearch_OfficerType', 'CUR');
+    $querystring[] = 'type=' . variable_get('ch_xml_gateway_OfficerSearch_OfficerType', 'CUR');
   }
     
   if (!empty($form_values['include_resigned_ind'])) {
-    $querystring['resigned_ind'] = $form_values['include_resigned_ind'];
+    $querystring[] = 'resigned_ind=' . $form_values['include_resigned_ind'];
   } 
   else {
-    $querystring['resigned_ind'] = variable_get('ch_xml_gateway_OfficerSearch_IncludeResignedInd', '0');
+    $querystring[] = 'resigned_ind=' . variable_get('ch_xml_gateway_OfficerSearch_IncludeResignedInd', '0');
   }
 
-  drupal_goto('chxmlgw/officer-search-result', array('query' => $querystring));
+  drupal_goto('chxmlgw/officer-search-result', implode('&', $querystring));
 }
 
 /**
@@ -896,10 +882,7 @@ function _search_form_options_page() {
 function _company_search_page() {
   drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/ch_xml_gateway-default.css', 'module', 'all', TRUE);
   $form = drupal_get_form('_company_search_form');
-  $output['content'] = array(
-    '#theme' => 'company_search_page',
-    '#form' => render($form),
-  );
+  $output = theme('company_search_page', $form);
   return $output;
 }
 
@@ -919,7 +902,7 @@ function _company_search_result_page($company_name) {
  * Officer search page
  *
  * @return
- * Render array containing the officer search form.
+ * Markup containing the officer search form.
  */
 function _officer_search_page() {
   drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/ch_xml_gateway-default.css', 'module', 'all', TRUE);
@@ -934,10 +917,7 @@ function _officer_search_page() {
       'show_resigned_ind' => variable_get('ch_xml_gateway_form_settings_OfficerSearch_show_include_resigned', '1'),
     )
   );
-  $output['content'] = array(
-    '#theme' => 'officer_search_page',
-    '#form' => render($form),
-  );
+  $output = theme('officer_search_page', $form);
   return $output;
 }
 
@@ -945,25 +925,23 @@ function _officer_search_page() {
  * Officer search results page
  * 
  * @return
- * Renderable array for results of an officer search.
+ * Themed markup for results of an officer search.
  *
  * TODO: Convert the officer search functionality to use URL arguments
  */
 function _officer_search_result_page() {
-  $output = array();
+  $output = '';
   $forenames = '';
-  $town = '';
   drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/ch_xml_gateway-default.css', 'module', 'all', TRUE);
   $use_ajax = variable_get('ch_xml_gateway_form_settings_all_ajax_searches', 0);
   if ($use_ajax) {
-    drupal_add_library('system', 'ui.dialog');
     drupal_add_js(drupal_get_path('module', 'ch_xml_gateway') . '/ch_xml_gateway.js');
     // Add to Drupal.settings values to make available in client javascript
     drupal_add_js(
       array('ch_xml_gateway' =>
         array(
           'json_url_stub' => url('chxmlgw/json', array('absolute' => TRUE)),
-          'access_officer_details' => user_access('query officerdetails'),
+          'access_officer_details' => user_access('Query OfficerDetails'),
         )
       ),
       'setting'
@@ -991,28 +969,23 @@ function _officer_search_result_page() {
       $_GET['surname'] = $names[0];
     }
   }
+
+  if (!empty($_GET['forename_2'])) {
+    $forenames = array(check_plain($_GET['forename_1']), check_plain($_GET['forename_2']));
+  } 
   else {
-    if (!empty($_GET['forename_2'])) {
-      $forenames = array(check_plain($_GET['forename_1']), check_plain($_GET['forename_2']));
-    } 
-    else {
-      $forenames = check_plain($_GET['forename_1']);
-    }
-  }
-  
-  if (!empty($_GET['town'])) {
-    $town = $_GET['town'];
+    $forenames = check_plain($_GET['forename_1']);
   }
   
   $officer_search_settings = array(
     'forename' => $forenames,
     'surname' => check_plain($_GET['surname']),
-    'posttown' => check_plain($town),
+    'posttown' => check_plain($_GET['town']),
     'officer_type' => check_plain($_GET['type']),
     'resigned_ind' => check_plain($_GET['resigned_ind']),
   );
     
-  $output = _query_gateway('OfficerSearch', 'html', '', $officer_search_settings, '', '');
+  $output .= _query_gateway('OfficerSearch', 'html', '', $officer_search_settings, '', '');
 
   return $output;
 }
@@ -1021,15 +994,12 @@ function _officer_search_result_page() {
  * Company search page
  *
  * @return
- * Renderable array to search for commpany details (by company number).
+ * Markup containing form enabling search for commpany details.
  */
 function _company_details_page() {
   drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/ch_xml_gateway-default.css', 'module', 'all', TRUE);
   $form = drupal_get_form('_company_details_form');
-  $output['content'] = array(
-    '#theme' => 'company_details_page',
-    '#form' => render($form),
-  );
+  $output = theme('company_details_page', $form);
   return $output;
 }
 
@@ -1071,22 +1041,20 @@ function _officer_details_page($officer_id) {
  */
 function _officer_details_json($officer_id) {
   $output = _query_gateway('OfficerDetails', 'json', '', NULL, base64_decode($officer_id), '');
-  drupal_json_output($output);
+  drupal_set_header('Content-Type: application/json; charset: utf-8');
+  printf($output);
 }
 
 /**
  * Appointments search page
  *
  * @return
- * Renderable array to enable search of company appointments using a company number.
+ * Markup including form to enable search of company appointments using a company number.
  */
 function _company_appointments_search_page() {
   drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/ch_xml_gateway-default.css', 'module', 'all', TRUE);
   $form = drupal_get_form('_appointments_search_form');
-  $output['content'] = array(
-    '#theme' => 'company_appointments_search_page',
-    '#form' => render($form),
-  );
+  $output = theme('company_appointments_search_page', $form);
   return $output;
 }
 
@@ -1101,14 +1069,13 @@ function _appointments_search_result_page($company_number = '') {
   drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/ch_xml_gateway-default.css', 'module', 'all', TRUE);
   $use_ajax = variable_get('ch_xml_gateway_form_settings_all_ajax_searches', 0);
   if ($use_ajax) {
-    drupal_add_library('system', 'ui.dialog');
     drupal_add_js(drupal_get_path('module', 'ch_xml_gateway') . '/ch_xml_gateway.js');
     // Add a Drupal.settings value to client javascript to make it easier to call JSON returning function(s)
     drupal_add_js(
       array('ch_xml_gateway' =>
         array(
           'json_url_stub' => url('chxmlgw/json', array('absolute' => TRUE)),
-          'access_officer_details' => user_access('query officerdetails'),
+          'access_officer_details' => user_access('Query OfficerDetails'),
         )
       ),
       'setting'
@@ -1200,21 +1167,16 @@ function _query_gateway($message_type = '', $format = 'html', $company_number = 
  * Call XML gateway NameSearch
  *
  * @return
- * Renderable array of search result.
+ * Themed search result.
  */
 function _NameSearch($ch_obj, $company_alpha_key) {
-  $output['content'] = array(
-    '#theme' => 'company_search_result_page',
-    '#error' => NULL,
-    '#companyList' => NULL,
-  );
-
+  $output = '';
   if ($companyList = $ch_obj->companyNameSearch($company_alpha_key, 'LIVE')) {
     _log_gateway_access($companyList, $ch_obj->getErrors(), 'NameSearch', array('company_alpha_key' => $company_alpha_key));
-    $output['content']['#companyList'] = $companyList;
+    $output = theme('company_search_result_page', NULL, $companyList);
   }
   else {
-    $output['content']['#error'] = 'No NameSearch data';
+    $output = theme('company_search_result_page', 'No NameSearch data', NULL);
   }
   return $output;
 }
@@ -1226,20 +1188,16 @@ function _NameSearch($ch_obj, $company_alpha_key) {
  * Themed markup of result.
  */
 function _CompanyDetails($ch_obj, $company_number = '') {
-  $output['content'] = array(
-    '#theme' => 'company_details_result',
-    '#error' => NULL,
-    '#companyDetails' => NULL,
-  );
+  $output = '';
   $give_mortgage_totals = (boolean) variable_get('ch_xml_gateway_CompanyDetails_GiveMortTotals', 0);
 
   if ($companyDetails = $ch_obj->companyDetails($company_number, $give_mortgage_totals)) {
     _log_gateway_access($companyDetails, $ch_obj->getErrors(), 'CompanyDetails', array('company_number' => $company_number, 'give_mortgage_totals' => $give_mortgage_totals));
-    $output['content']['#companyDetails'] = $companyDetails;
+    $output = theme('company_details_result', '', $companyDetails);
   } 
   else {
     // TODO: Pass any /GovTalkMessage/GovTalkDetails/GovTalkErrors/* info into template instead of text
-    $output['content']['#error'] = 'No CompanyDetails data';
+    $output = theme('company_details_result', 'No CompanyDetails data', NULL);
   }
   return $output;
 }
@@ -1251,20 +1209,16 @@ function _CompanyDetails($ch_obj, $company_number = '') {
  * Themed markup of result.
  */
 function _CompanyAppointments($ch_obj, $company_number = '') {
-  $output['content'] = array(
-    '#theme' => 'company_appointments_result',
-    '#error' => NULL,
-    '#companyAppointments' => NULL,
-  );
+  $output = '';
   $include_resigned = (boolean) variable_get('ch_xml_gateway_CompanyAppointments_IncludeResignedInd', 0);
 
   if ($companyAppointments = $ch_obj->companyAppointmentsDetails('', $company_number, $include_resigned)) {
     _log_gateway_access($companyAppointments, $ch_obj->getErrors(), 'CompanyAppointments', array('company_number' => $company_number, 'include_resigned' => $include_resigned));
-    $output['content']['#companyAppointments'] = $companyAppointments;
+    $output = theme('company_appointments_result', '', $companyAppointments);
   } 
   else {
     // TODO: Pass any /GovTalkMessage/GovTalkDetails/GovTalkErrors/* info into template instead of text
-    $output['content']['#error'] = 'No CompanyAppointments data';
+    $output = theme('company_appointments_result', 'No CompanyAppointments data', NULL);
   }
   return $output;
 }
@@ -1276,19 +1230,14 @@ function _CompanyAppointments($ch_obj, $company_number = '') {
  * Themed markup of result.
  */
 function _OfficerSearch($ch_obj, $surname = '', $forename = '', $officer_type = '', $town = '', $resigned_ind = 0) {
-  $output['content'] = array(
-    '#theme' => 'officer_search_result',
-    '#error' => NULL,
-    '#officerList' => NULL,
-  );
-
+  $output = '';
   if ($officerList = $ch_obj->companyOfficerSearch($surname, $forename, $officer_type , $town, $resigned_ind)) {
     _log_gateway_access($officerList, $ch_obj->getErrors(), 'OfficerSearch', array('surname' => $surname, 'forename' => $forename, 'officer_type' => $officer_type, 'town' => $town, 'resigned_ind' => $resigned_ind));
-    $output['content']['#officerList'] = $officerList;
+    $output = theme('officer_search_result', '', $officerList);
   } 
   else {
     // TODO: Pass any /GovTalkMessage/GovTalkDetails/GovTalkErrors/* info into template instead of text using $ch_obj->getErrors()
-    $output['content']['#error'] = 'No OfficerSearch data';
+    $output = theme('officer_search_result', 'No OfficerSearch data', '');
   }
   return $output;
 }
@@ -1297,15 +1246,10 @@ function _OfficerSearch($ch_obj, $surname = '', $forename = '', $officer_type = 
  * Call XML gateway OfficerDetails
  * 
  * @return
- * JSON encoded result or renderable array of result of calling OfficerDetails.
+ * JSON encoded result or themed markup of result.
  */
 function _OfficerDetails($ch_obj, $person_id, $format = 'html') {
-  $output['content'] = array(
-    '#theme' => 'officer_details_result',
-    '#error' => NULL,
-    '#officerDetails' => NULL,
-  );
-
+  $output = '';
   if ($officerDetails = $ch_obj->officerDetails($person_id, 'example.com')) {
     $officerDetails['formatted_forename'] = _format_officer_forename($officerDetails['forename']);
     _log_gateway_access($officerDetails, $ch_obj->getErrors(), 'OfficerDetails', array('person_id' => $person_id));
@@ -1313,7 +1257,7 @@ function _OfficerDetails($ch_obj, $person_id, $format = 'html') {
       $output = json_encode($officerDetails);
     }
     else {
-      $output['content']['#officerDetails'] = $officerDetails;
+      $output = theme('officer_details_result', '', $officerDetails);
     }
   } 
   else {
@@ -1323,7 +1267,7 @@ function _OfficerDetails($ch_obj, $person_id, $format = 'html') {
       $output = '{"error":"No OfficerDetails data"}';
     }
     else {
-      $output['content']['#error'] = 'No OfficerDetails data';
+      $output = theme('officer_details_result', 'No OfficerDetails data', '');
     }
   }
   return $output;
@@ -1447,178 +1391,136 @@ function _gateway_history_page_access($url_user_id) {
  * billable if this history were to be used for that purpose).
  * 
  * @return
- * Render array containing elements defining the users previous gateway usage.
+ * Markup containg user gateway usage history.
+ *
+ * TODO: 'Proper' theming
  */
 function _user_gateway_history_page($url_user_id) {
-  $query = db_select('ch_xml_gateway_query', 'ch')->extend('PagerDefault');
-  $query->fields('ch', array('id', 'query_timestamp', 'service_name', 'params_json'));
-  $query->condition('ch.uid', $url_user_id);
-  $query->limit(20);
-  $results = $query->execute();
-  
+  $query = 'SELECT id, query_timestamp, service_name, params_json FROM {ch_xml_gateway_query} ch WHERE uid = %d ORDER BY query_timestamp DESC';
+  $page_size = 20;
+  $results = pager_query($query, $page_size, 0, NULL, array($url_user_id));
+  $header = array('Date queried', 'Service', 'Parameter(s)');
   $body = array();
-  foreach ($results as $row) {
+  while ($row = db_fetch_object($results)) {
     $body[] = array(date('Y-m-d H:i:s', $row->query_timestamp), l($row->service_name, 'chxmlgw/gateway-history/user/' . $url_user_id . '/' . $row->id), _format_search_history_search_params($row->service_name, $row->params_json));
   }
+  $output = theme('table', $header, $body);
+  $output .= theme('pager', NULL, $page_size, 0);
 
-  // Return a render array..
-  $page = array();
-  $page['table'] = array(
-    '#theme' => 'table',
-    '#header' => array('Date queried', 'Service', 'Parameter(s)'),
-    '#rows' => $body,
-  );
-  $page['pager'] = array(
-    '#theme' => 'pager',
-  );
-  return $page;  
+  return $output;
 }
 
 /**
  * Page to show the details of a previously submitted gateway query.
  *
  * @return
- * Renderable array containing details of a previous gateway query.
+ * Markup showing details of a query.
  */
 function _gateway_previous_query_page($url_user_id = 0, $query_id = 0) {
   drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/ch_xml_gateway-default.css', 'module', 'all', TRUE);
-  $page = array('content' => array());
-  $query = 'SELECT * FROM {ch_xml_gateway_query} ch WHERE id = :id AND uid = :user_id';
-  $result = db_query($query, array(':id' => $query_id, ':user_id' => $url_user_id));
-  $row = $result->fetchObject();
+  $output = '';
+  $query = 'SELECT * FROM {ch_xml_gateway_query} ch WHERE id = %d AND uid = %d';
+  $result = db_query($query, $query_id, $url_user_id);
+  $row = db_fetch_object($result);
 
   if ($row) {
     $response = json_decode($row->response_json, TRUE);
-
     $meta['user_id'] = $url_user_id;
     $meta['service_name'] = $row->service_name;
     $meta['query_timestamp'] = date('Y-m-d H:i:s', $row->query_timestamp);
     $meta['query_params'] = json_decode($row->params_json, TRUE);
-    $page['content']['#meta'] = $meta;
     
     switch ($row->service_name) {
       case 'NameSearch':
-        $page['content']['#theme'] = 'historic_company_search';
-        $page['content']['#companyList'] = $response;
+        $template = 'historic_company_search';
         break;
 
       case 'CompanyDetails':
-        $page['content']['#theme'] = 'historic_company_details';
-        $page['content']['#companyDetails'] = $response;
+        $template = 'historic_company_details';
         break;
 
       case 'CompanyAppointments':
-        $page['content']['#theme'] = 'historic_company_appointments';
-        $page['content']['#companyAppointments'] = $response;
+        $template = 'historic_company_appointments';
         break;
 
       case 'OfficerDetails':
-        $page['content']['#theme'] = 'historic_officer_details';
-        $page['content']['#officerDetails'] = $response;
+        $template = 'historic_officer_details';
         break;
 
       case 'OfficerSearch':
-        $page['content']['#theme'] = 'historic_officer_search';
-        $page['content']['#officerList'] = $response;
+        $template = 'historic_officer_search';
         break;
     }
+    $output = theme($template, $meta, $response);
   }
   else {
     // TODO: Add to watchdog
-    $page['content']['#markup'] = 'There was a problem retrieving that query. Please contact an administrator. Query id: ' . $query_id . ', user id: ' . $url_user_id;
+    $output = 'There was a problem retrieving that query. Please contact an administrator. Query id: ' . $query_id . ', user id: ' . $url_user_id;
   }
     
-  return $page;
-}
-
-/**
- * Format a string to be the title displayed on the user gateway history page.
- *
- * @return
- * String of text containing the username of the users history that's being viewed.
- */
-function _gateway_history_page_title($user_id) {
-  $user_name = _get_user_name_from_id($user_id);
-  $title = '"' . $user_name . '" Companies House XML Gateway usage';
-  return $title;
-}
-
-/**
- * Load a user account from its id and return its username value.
- *
- * @return
- * A username.
- */
-function _get_user_name_from_id($user_id) {
-  $name = 'Anonnymous';
-  $acc = ''; // avoid potential to clobber $user
-  if ($user_id > 0) {
-    $acc = user_load($user_id);
-    $name = $acc->name;
-  }
-  return $name;
+  return $output;
 }
 
 /*
- * Implements hook_theme()
+ * Implement hook_theme()
  */
 function ch_xml_gateway_theme() {
   return array(
     'company_search_page' => array(
       'template' => 'company-search-page',
-      'variables' => array(
+      'arguments' => array(
         'form' => NULL,
       ),
     ),
     'company_search_result_page' => array(
       'template' => 'company-search-result',
-      'variables' => array(
+      'arguments' => array(
         'error' => NULL,
         'companyList' => NULL,
       ),
     ),
     'company_details_page' => array(
       'template' => 'company-details-page',
-      'variables' => array(
+      'arguments' => array(
          'form' => NULL,
       ),
     ),
     'company_details_result' => array(
       'template' => 'company-details-result',
-      'variables' => array(
+      'arguments' => array(
          'error' => NULL,
          'companyDetails' => NULL,
       ),
     ),
     'company_appointments_search_page' => array(
       'template' => 'company-appointments-search-page',
-      'variables' => array(
+      'arguments' => array(
          'form' => NULL,
       ),
     ),
     'company_appointments_result' => array(
       'template' => 'company-appointments-result',
-      'variables' => array(
+      'arguments' => array(
         'error' => NULL,
         'companyAppointments' => NULL,
       ),
     ),
     'officer_details_result' => array(
       'template' => 'officer-details-result',
-      'variables' => array(
+      'arguments' => array(
         'error' => NULL,
         'officerDetails' => NULL,
       ),
     ),
     'officer_search_page' => array(
       'template' => 'officer-search-page',
-      'variables' => array(
+      'arguments' => array(
          'form' => NULL,
       ),
     ),
     'officer_search_result' => array(
       'template' => 'officer-search-result',
-      'variables' => array(
+      'arguments' => array(
         'error' => NULL,
         'officerList' => NULL,
       ),
@@ -1626,35 +1528,35 @@ function ch_xml_gateway_theme() {
     // Query history are read only (no links to other pages)
     'historic_company_search' => array(
       'template' => 'historic-company-search',
-      'variables' => array(
+      'arguments' => array(
         'meta' => NULL,
         'companyList' => NULL,
       ),
     ),
     'historic_company_details' => array(
       'template' => 'historic-company-details',
-      'variables' => array(
+      'arguments' => array(
         'meta' => NULL,
         'companyDetails' => NULL,
       ),
     ),
     'historic_company_appointments' => array(
       'template' => 'historic-company-appointments',
-      'variables' => array(
+      'arguments' => array(
         'meta' => NULL,
         'companyAppointments' => NULL,
       ),
     ),
     'historic_officer_details' => array(
       'template' => 'historic-officer-details',
-      'variables' => array(
+      'arguments' => array(
         'meta' => NULL,
         'officerDetails' => NULL,
       ),
     ),
     'historic_officer_search' => array(
       'template' => 'historic-officer-search',
-      'variables' => array(
+      'arguments' => array(
         'meta' => NULL,
         'officerList' => NULL,
       ),

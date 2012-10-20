@@ -16,12 +16,7 @@ the site admin screen.
 You will need to configure permissions to allow users other than
 user id = 1 to be able to use the gateway at:
 
-    http://<your_domain>/admin/people/permissions
-
-BE CAREFUL WHO YOU GIVE PERMISSION TO WHICH SERVICES. SOME SERVICES
-ARE CHARGEABLE. See:
-
-	http://xmlgw.companieshouse.gov.uk/CHDpriceList.shtml
+    http://<your_domain>/admin/user/permissions
 
 If you do not have your own login to the gateway, the services will
 always return the same data. Enter your login details using the form 
@@ -90,6 +85,3 @@ library that the module is using relies upon. You should install
 php-xml with:
 
 yum install php-xml (or equivalent for your platform)
-
-My development environment was with Drupal 7.12 and PHP 5.3.10 (and also
-tested with 5.2.9-2) on Win XP/Vista.
