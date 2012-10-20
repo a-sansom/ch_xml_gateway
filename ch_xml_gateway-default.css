@@ -1,0 +1,50 @@
+/*
+ * Default styling of module output
+ */
+#search-results {
+}
+#search-results-matches {
+  width: 50%;
+}
+#search-results-meta {
+}
+#exact-match {
+}
+#near-matches {
+}
+
+#company-appointments {
+  position: relative;
+}
+.appointment {
+  position: relative;
+}
+.odd  {
+}
+.even {
+}
+.officer-details-link {
+}
+
+/* Element holds the JSON response data */
+#selected-appointment-detail {
+}
+/* Element generated in script and inserted into #selected-appointment-detail */
+#dynamic-appointments-container {
+}
+.dynamic-appointment-appointments-company-header,
+.dynamic-appointment-appointments-header {
+  background-color: #E0E0E0;
+}
+.dynamic-appointment-company-name,
+.dynamic-appointment-detail {
+}
+
+#json-error {
+}
+
+.match {
+}
+.exact,
+.non-exact {
+}
