@@ -2,5 +2,6 @@ name = "Companies House XML Gateway"
 description = "Enable Drupal to query the Companies House XML gateway via the php-govtalk library."
 core = 7.x
 package = Other
+configure = admin/config/services/chxmlgw
 files[] = lib/php-govtalk/GovTalk.php
 files[] = lib/php-govtalk/extensions/CompaniesHouse/CompaniesHouse.php
