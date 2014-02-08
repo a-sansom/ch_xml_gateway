@@ -1566,12 +1566,14 @@ function ch_xml_gateway_theme() {
   return array(
     'company_search_page' => array(
       'template' => 'company-search-page',
+      'path' => drupal_get_path('module', 'ch_xml_gateway') . '/templates',
       'variables' => array(
         'form' => NULL,
       ),
     ),
     'company_search_result_page' => array(
       'template' => 'company-search-result',
+      'path' => drupal_get_path('module', 'ch_xml_gateway') . '/templates',
       'variables' => array(
         'error' => NULL,
         'companyList' => NULL,
@@ -1579,12 +1581,14 @@ function ch_xml_gateway_theme() {
     ),
     'company_details_page' => array(
       'template' => 'company-details-page',
+      'path' => drupal_get_path('module', 'ch_xml_gateway') . '/templates',
       'variables' => array(
          'form' => NULL,
       ),
     ),
     'company_details_result' => array(
       'template' => 'company-details-result',
+      'path' => drupal_get_path('module', 'ch_xml_gateway') . '/templates',
       'variables' => array(
          'error' => NULL,
          'companyDetails' => NULL,
@@ -1592,12 +1596,14 @@ function ch_xml_gateway_theme() {
     ),
     'company_appointments_search_page' => array(
       'template' => 'company-appointments-search-page',
+      'path' => drupal_get_path('module', 'ch_xml_gateway') . '/templates',
       'variables' => array(
          'form' => NULL,
       ),
     ),
     'company_appointments_result' => array(
       'template' => 'company-appointments-result',
+      'path' => drupal_get_path('module', 'ch_xml_gateway') . '/templates',
       'variables' => array(
         'error' => NULL,
         'companyAppointments' => NULL,
@@ -1605,6 +1611,7 @@ function ch_xml_gateway_theme() {
     ),
     'officer_details_result' => array(
       'template' => 'officer-details-result',
+      'path' => drupal_get_path('module', 'ch_xml_gateway') . '/templates',
       'variables' => array(
         'error' => NULL,
         'officerDetails' => NULL,
@@ -1612,12 +1619,14 @@ function ch_xml_gateway_theme() {
     ),
     'officer_search_page' => array(
       'template' => 'officer-search-page',
+      'path' => drupal_get_path('module', 'ch_xml_gateway') . '/templates',
       'variables' => array(
          'form' => NULL,
       ),
     ),
     'officer_search_result' => array(
       'template' => 'officer-search-result',
+      'path' => drupal_get_path('module', 'ch_xml_gateway') . '/templates',
       'variables' => array(
         'error' => NULL,
         'officerList' => NULL,
@@ -1626,6 +1635,7 @@ function ch_xml_gateway_theme() {
     // Query history are read only (no links to other pages)
     'historic_company_search' => array(
       'template' => 'historic-company-search',
+      'path' => drupal_get_path('module', 'ch_xml_gateway') . '/templates',
       'variables' => array(
         'meta' => NULL,
         'companyList' => NULL,
@@ -1633,6 +1643,7 @@ function ch_xml_gateway_theme() {
     ),
     'historic_company_details' => array(
       'template' => 'historic-company-details',
+      'path' => drupal_get_path('module', 'ch_xml_gateway') . '/templates',
       'variables' => array(
         'meta' => NULL,
         'companyDetails' => NULL,
@@ -1640,6 +1651,7 @@ function ch_xml_gateway_theme() {
     ),
     'historic_company_appointments' => array(
       'template' => 'historic-company-appointments',
+      'path' => drupal_get_path('module', 'ch_xml_gateway') . '/templates',
       'variables' => array(
         'meta' => NULL,
         'companyAppointments' => NULL,
@@ -1647,6 +1659,7 @@ function ch_xml_gateway_theme() {
     ),
     'historic_officer_details' => array(
       'template' => 'historic-officer-details',
+      'path' => drupal_get_path('module', 'ch_xml_gateway') . '/templates',
       'variables' => array(
         'meta' => NULL,
         'officerDetails' => NULL,
@@ -1654,6 +1667,7 @@ function ch_xml_gateway_theme() {
     ),
     'historic_officer_search' => array(
       'template' => 'historic-officer-search',
+      'path' => drupal_get_path('module', 'ch_xml_gateway') . '/templates',
       'variables' => array(
         'meta' => NULL,
         'officerList' => NULL,
