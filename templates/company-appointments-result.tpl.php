@@ -1,10 +1,18 @@
+<?php 
+/**
+ * @file
+ * Template to display results of a CompanyAppointments search.
+ */
+?>
+
+
 <?php if ($error): ?>
  <p>
    Error: <?php print $error ?>
  </p>
 <?php endif; ?>
 
-<?php if ($companyAppointments): ?>
+<?php if ($company_appointments): ?>
 <div id="search-results">
   <!-- Placeholder to hold dynamic appointments content -->
   <div id="selected-appointment-detail"></div>
@@ -13,22 +21,22 @@
     <!-- Meta info -->
     <div id="search-results-meta">
       <div>
-        Company name: <?php print $companyAppointments['company_name'] ?>
+        Company name: <?php print $company_appointments['company_name'] ?>
       </div>
       <div>
-        Company number: <?php print $companyAppointments['company_number'] ?>
+        Company number: <?php print $company_appointments['company_number'] ?>
       </div>
       <div>
-        Has inconsistencies: <?php print $companyAppointments['has_inconsistencies'] ?>
+        Has inconsistencies: <?php print $company_appointments['has_inconsistencies'] ?>
       </div>
       <div>
-        No. current appointments: <?php print $companyAppointments['num_current_appt'] ?>
+        No. current appointments: <?php print $company_appointments['num_current_appt'] ?>
       </div>
       <div>
-        Search rows: <?php print $companyAppointments['search_rows'] ?>
+        Search rows: <?php print $company_appointments['search_rows'] ?>
       </div>
       <div>
-        Continuation key: <?php print $companyAppointments['continuation_key'] ?>
+        Continuation key: <?php print $company_appointments['continuation_key'] ?>
       </div>
     </div>
 
@@ -36,7 +44,7 @@
     <div id="company-appointments">
     <?php
       $index = 0;
-      foreach ($companyAppointments['appointments'] AS $appointment):
+      foreach ($company_appointments['appointments'] AS $appointment):
         $index++;
     ?>
       <div class="appointment appointment-<?php print $index ?> <?php ($index % 2 == 0) ? print 'even' : print 'odd' ?>">

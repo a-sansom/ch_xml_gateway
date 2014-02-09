@@ -1,13 +1,21 @@
+<?php 
+/**
+ * @file
+ * Template to display a users previous company name searches.
+ */
+?>
+
+
 <p>
   <?php print l(t('Back to your gateway history'), 'chxmlgw/gateway-history/user/'. $meta['user_id']) ?>
 </p>
 <p>
   On <?php print $meta['query_timestamp'] ?>, you queried <?php print $meta['service_name'] ?> and it returned the following information:
 </p>
-<?php if (count($companyList['exact']) > 0): ?>
+<?php if (count($company_list['exact']) > 0): ?>
 <h3>Exact match:</h3>
 <div>
-  <?php print l($companyList['exact']['name'], 'chxmlgw/gateway-history/user/' . $meta['user_id'], array('attributes' => array('class' => 'match exact'))) ?>
+  <?php print l($company_list['exact']['name'], 'chxmlgw/gateway-history/user/' . $meta['user_id'], array('attributes' => array('class' => 'match exact'))) ?>
 </div>
 <?php endif; ?>
 
@@ -15,7 +23,7 @@
 <div>
 <?php
   $index = 0; 
-  foreach ($companyList['match'] as $company): 
+  foreach ($company_list['match'] as $company): 
     $index++;
 ?>
   <ul>

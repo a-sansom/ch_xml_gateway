@@ -1,13 +1,12 @@
 <?php
 /**
-* @file
-* Install file to insert/remove various 'variable' table values used by the
-* module as well as create any database tables.
-*
-*/
+ * @file
+ * Create/delete 'variable' table values as well as create any database tables.
+ */
 
-/*
- * Implementation of hook_install()
+
+/**
+ * Implements hook_install().
  */
 function ch_xml_gateway_install() {
   variable_set('ch_xml_gateway_user', 'XMLGatewayTestUserID');
@@ -26,9 +25,9 @@ function ch_xml_gateway_install() {
   variable_set('ch_xml_gateway_form_settings_all_ajax_searches', '1');
 }
 
-/*
- * Implementation of hook_uninstall()
- *
+
+/**
+ * Implements hook_uninstall().
  */
 function ch_xml_gateway_uninstall() {
   variable_del('ch_xml_gateway_user');
@@ -47,8 +46,9 @@ function ch_xml_gateway_uninstall() {
   variable_del('ch_xml_gateway_form_settings_all_ajax_searches');
 }
 
-/*
- * Implementaion of hook_schema()
+
+/**
+ * Implements hook_schema().
  */
 function ch_xml_gateway_schema() {
   $schema['ch_xml_gateway_query'] = array(
@@ -98,6 +98,6 @@ function ch_xml_gateway_schema() {
       'uid' => array('uid'),
     ),
   );
-  
+
   return $schema;
 }

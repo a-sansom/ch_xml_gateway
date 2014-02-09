@@ -1,146 +1,154 @@
+<?php 
+/**
+ * @file
+ * Template to display results of a company search.
+ */
+?>
+
+
 <?php if ($error): ?>
   <p>
     Error: <?php print $error ?>
   </p>
 <?php endif; ?>
 
-<?php if ($companyDetails): ?>
+<?php if ($company_details): ?>
 <div>
   <div>
-    <span class="label">Name: </span><?php print $companyDetails['name'] ?>
+    <span class="label">Name: </span><?php print $company_details['name'] ?>
   </div>
   <div>
-    <span class="label">Company number: </span><?php print $companyDetails['number'] ?>
+    <span class="label">Company number: </span><?php print $company_details['number'] ?>
   </div>
   <div>
-    <span class="label">Category: </span><?php print $companyDetails['category'] ?>
+    <span class="label">Category: </span><?php print $company_details['category'] ?>
   </div>
   <div>
-    <span class="label">Status: </span><?php print $companyDetails['status'] ?>
+    <span class="label">Status: </span><?php print $company_details['status'] ?>
   </div>
   <div>
-    <span class="label">In liquidation: </span><?php print $companyDetails['liquidation'] ?>
+    <span class="label">In liquidation: </span><?php print $company_details['liquidation'] ?>
   </div>
-  <?php if (!empty($companyDetails['branchinfo'])): ?>
+  <?php if (!empty($company_details['branchinfo'])): ?>
     <div>
-      <span class="label">Has branch info: </span><?php print $companyDetails['branchinfo'] ?>
+      <span class="label">Has branch info: </span><?php print $company_details['branchinfo'] ?>
     </div>
   <?php endif; ?>
   <div>
-    <span class="label">Has appointments: </span><?php print $companyDetails['appointments'] ?>
+    <span class="label">Has appointments: </span><?php print $company_details['appointments'] ?>
   </div>
-  <?php if ($companyDetails['appointments'] == '1'): ?>
+  <?php if ($company_details['appointments'] == '1'): ?>
     <div>
-      <?php print l(t('(View appointments)'), 'chxmlgw/appointments-search/' . $companyDetails['number']); ?>
+      <?php print l(t('(View appointments)'), 'chxmlgw/appointments-search/' . $company_details['number']); ?>
     </div>
   <?php endif; ?>
-  <?php if (array_key_exists('registration_date', $companyDetails) && !empty($companyDetails['registration_date'])): ?>
+  <?php if (array_key_exists('registration_date', $company_details) && !empty($company_details['registration_date'])): ?>
     <div>
-      <span class="label">Registration date: </span><?php print $companyDetails['registration_date'] ?>
+      <span class="label">Registration date: </span><?php print $company_details['registration_date'] ?>
     </div>
   <?php endif; ?>
-  <?php if (array_key_exists('dissolution_date', $companyDetails) && !empty($companyDetails['dissolution_date'])): ?>
+  <?php if (array_key_exists('dissolution_date', $company_details) && !empty($company_details['dissolution_date'])): ?>
     <div>
-      <span class="label">Dissolution date: </span><?php print date('d/m/Y', $companyDetails['dissolution_date']) ?>
+      <span class="label">Dissolution date: </span><?php print date('d/m/Y', $company_details['dissolution_date']) ?>
     </div>
   <?php endif; ?>
-  <?php if (array_key_exists('incorporation_date', $companyDetails) && !empty($companyDetails['incorporation_date'])): ?>
+  <?php if (array_key_exists('incorporation_date', $company_details) && !empty($company_details['incorporation_date'])): ?>
     <div>
-      <span class="label">Incorporation date: </span><?php print date('d/m/Y', $companyDetails['incorporation_date']) ?>
+      <span class="label">Incorporation date: </span><?php print date('d/m/Y', $company_details['incorporation_date']) ?>
     </div>
   <?php endif; ?>
-  <?php if (array_key_exists('closure_date', $companyDetails) && !empty($companyDetails['closure_date'])): ?>
+  <?php if (array_key_exists('closure_date', $company_details) && !empty($company_details['closure_date'])): ?>
     <div>
-      <span class="label">Closure date: </span><?php print $companyDetails['closure_date'] ?>
+      <span class="label">Closure date: </span><?php print $company_details['closure_date'] ?>
     </div>
   <?php endif; ?>
-  <?php if (array_key_exists('accounts', $companyDetails)): ?>
+  <?php if (array_key_exists('accounts', $company_details)): ?>
     <div>
-      <span class="label">Accounts overdue: </span><?php print $companyDetails['accounts']['overdue'] ?>
+      <span class="label">Accounts overdue: </span><?php print $company_details['accounts']['overdue'] ?>
     </div>
     <div>
-      <span class="label">Accounts document available: </span><?php print $companyDetails['accounts']['document'] ?>
+      <span class="label">Accounts document available: </span><?php print $company_details['accounts']['document'] ?>
     </div>
   <?php endif; ?>
-  <?php if (array_key_exists('reference_date', $companyDetails['accounts']) && !empty($companyDetails['accounts']['reference_date'])): ?>
+  <?php if (array_key_exists('reference_date', $company_details['accounts']) && !empty($company_details['accounts']['reference_date'])): ?>
     <!-- Different date value to other date values 'dd-mm' -->
     <div>
-      <span class="label">Accounts reference date: </span><?php print $companyDetails['accounts']['reference_date'] ?>
+      <span class="label">Accounts reference date: </span><?php print $company_details['accounts']['reference_date'] ?>
     </div>
   <?php endif; ?>
-  <?php if (array_key_exists('due_date', $companyDetails['accounts']) && !empty($companyDetails['accounts']['due_date'])): ?>
+  <?php if (array_key_exists('due_date', $company_details['accounts']) && !empty($company_details['accounts']['due_date'])): ?>
     <div>
-      <span class="label">Accounts due date: </span><?php print date('d/m/Y', $companyDetails['accounts']['due_date']) ?>
+      <span class="label">Accounts due date: </span><?php print date('d/m/Y', $company_details['accounts']['due_date']) ?>
     </div>
   <?php endif; ?>
-  <?php if (array_key_exists('last_madeup', $companyDetails['accounts']) && !empty($companyDetails['accounts']['last_madeup'])): ?>
+  <?php if (array_key_exists('last_madeup', $company_details['accounts']) && !empty($company_details['accounts']['last_madeup'])): ?>
     <div>
-      <span class="label">Accounts last made up: </span><?php print date('d/m/Y', $companyDetails['accounts']['last_madeup']) ?>
+      <span class="label">Accounts last made up: </span><?php print date('d/m/Y', $company_details['accounts']['last_madeup']) ?>
     </div>
   <?php endif; ?>
-  <?php if (array_key_exists('category', $companyDetails['accounts']) && !empty($companyDetails['accounts']['category'])): ?>
+  <?php if (array_key_exists('category', $company_details['accounts']) && !empty($company_details['accounts']['category'])): ?>
     <div>
-      <span class="label">Accounts category: </span><?php print $companyDetails['accounts']['category'] ?>
+      <span class="label">Accounts category: </span><?php print $company_details['accounts']['category'] ?>
     </div>
   <?php endif; ?>
-  <?php if (array_key_exists('returns', $companyDetails)): ?>
+  <?php if (array_key_exists('returns', $company_details)): ?>
     <div>
-      <span class="label">Returns overdue: </span><?php print $companyDetails['returns']['overdue'] ?>
+      <span class="label">Returns overdue: </span><?php print $company_details['returns']['overdue'] ?>
     </div>
     <div>
-      <span class="label">Returns document available: </span><?php print $companyDetails['returns']['document'] ?>
-    </div>
-  <?php endif; ?>
-  <?php if (array_key_exists('due_date', $companyDetails['returns']) && !empty($companyDetails['returns']['due_date'])): ?>
-    <div>
-      <span class="label">Returns due date: </span><?php print date('d/m/Y', $companyDetails['returns']['due_date']) ?>
+      <span class="label">Returns document available: </span><?php print $company_details['returns']['document'] ?>
     </div>
   <?php endif; ?>
-  <?php if (array_key_exists('last_madeup', $companyDetails['returns']) && !empty($companyDetails['returns']['last_madeup'])): ?>
+  <?php if (array_key_exists('due_date', $company_details['returns']) && !empty($company_details['returns']['due_date'])): ?>
     <div>
-      <span class="label">Returns last made up: </span><?php print date('d/m/Y', $companyDetails['returns']['last_madeup']) ?>
+      <span class="label">Returns due date: </span><?php print date('d/m/Y', $company_details['returns']['due_date']) ?>
     </div>
   <?php endif; ?>
-  <?php if (array_key_exists('mortgage', $companyDetails)): ?>
+  <?php if (array_key_exists('last_madeup', $company_details['returns']) && !empty($company_details['returns']['last_madeup'])): ?>
     <div>
-      <span class="label">Mortgage register: </span><?php print $companyDetails['mortgage']['register'] ?>
-    </div>
-    <div>
-      <span class="label">Mortgage charges: </span><?php print $companyDetails['mortgage']['charges'] ?>
-    </div>
-    <div>
-      <span class="label">Mortgage outstanding: </span><?php print $companyDetails['mortgage']['outstanding'] ?>
-    </div>
-    <div>
-      <span class="label">Mortgage part satisfied: </span><?php print $companyDetails['mortgage']['part_satisfied'] ?>
-    </div>
-    <div>
-      <span class="label">Mortgage fully satisfied: </span><?php print $companyDetails['mortgage']['fully_satisfied'] ?>
+      <span class="label">Returns last made up: </span><?php print date('d/m/Y', $company_details['returns']['last_madeup']) ?>
     </div>
   <?php endif; ?>
-  <?php if (array_key_exists('previous_name', $companyDetails)): ?>
+  <?php if (array_key_exists('mortgage', $company_details)): ?>
+    <div>
+      <span class="label">Mortgage register: </span><?php print $company_details['mortgage']['register'] ?>
+    </div>
+    <div>
+      <span class="label">Mortgage charges: </span><?php print $company_details['mortgage']['charges'] ?>
+    </div>
+    <div>
+      <span class="label">Mortgage outstanding: </span><?php print $company_details['mortgage']['outstanding'] ?>
+    </div>
+    <div>
+      <span class="label">Mortgage part satisfied: </span><?php print $company_details['mortgage']['part_satisfied'] ?>
+    </div>
+    <div>
+      <span class="label">Mortgage fully satisfied: </span><?php print $company_details['mortgage']['fully_satisfied'] ?>
+    </div>
+  <?php endif; ?>
+  <?php if (array_key_exists('previous_name', $company_details)): ?>
     <div>
       <span class="label">Previous names:</span>
-      <?php foreach ($companyDetails['previous_name'] AS $previousName): ?>
+      <?php foreach ($company_details['previous_name'] AS $previous_name): ?>
         <div>
-          <?php print $previousName ?>
+          <?php print $previous_name ?>
         </div>
       <?php endforeach; ?>
     </div>
   <?php endif; ?>
   <div>
     <span class="label">Address:</span>
-    <?php foreach ($companyDetails['address'] AS $addressLine): ?>
+    <?php foreach ($company_details['address'] AS $address_line): ?>
       <div>
-        <?php print $addressLine ?>
+        <?php print $address_line ?>
       </div>
     <?php endforeach; ?>
   </div>
   <div>
     <span class="label">Sic code(s):</span>
-    <?php foreach ($companyDetails['sic_code'] AS $sicItem): ?>
+    <?php foreach ($company_details['sic_code'] AS $sic_item): ?>
       <div>
-        <?php print $sicItem ?>
+        <?php print $sic_item ?>
       </div>
     <?php endforeach; ?>
   </div>

@@ -37,7 +37,7 @@ jQuery(document).ready(
             title: 'Access denied'
 		  });
 	    }
-	  })
+	  });
     });
   }
 );
@@ -47,7 +47,7 @@ ch_xml_gateway.json_url = function(link) {
   linkParts = link.split('/');
   jsonLink = Drupal.settings.ch_xml_gateway.json_url_stub + '/' + linkParts[2] + '/' + linkParts[3];
   return jsonLink;
-}
+};
 
 // Execute submission to get JSON data
 ch_xml_gateway.exec_json = function(url, apptIndex) {
@@ -81,4 +81,4 @@ ch_xml_gateway.exec_json = function(url, apptIndex) {
 	  jQuery('#selected-appointment-detail').html(markup);
     }
   });
-}
+};

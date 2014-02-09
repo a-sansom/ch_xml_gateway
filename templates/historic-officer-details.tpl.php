@@ -1,3 +1,11 @@
+<?php 
+/**
+ * @file
+ * Template to display a users previous officer searches.
+ */
+?>
+
+
 <p>
   <?php print l(t('Back to your gateway history'), 'chxmlgw/gateway-history/user/'. $meta['user_id']) ?>
 </p>
@@ -6,48 +14,48 @@
 </p>
 <!-- Name etc. -->
 <div>
-  <h3><?php print $officerDetails['title'] . ' ' . $officerDetails['formatted_forename'] . ' ' . $officerDetails['surname'] ?></h3>
-  <?php if (!empty($officerDetails['honours'])): ?>
+  <h3><?php print $officer_details['title'] . ' ' . $officer_details['formatted_forename'] . ' ' . $officer_details['surname'] ?></h3>
+  <?php if (!empty($officer_details['honours'])): ?>
     <div>
-      <span class="label">Honours: </span><?php print $officerDetails['honours'] ?>
+      <span class="label">Honours: </span><?php print $officer_details['honours'] ?>
     </div>
   <?php endif; ?>
-  <?php if( !empty($officerDetails['dob'])): ?>
+  <?php if( !empty($officer_details['dob'])): ?>
     <div>
-      <span class="label">DOB: </span><?php print date('d/m/Y', $officerDetails['dob']) ?>
+      <span class="label">DOB: </span><?php print date('d/m/Y', $officer_details['dob']) ?>
     </div>
   <?php endif; ?>
   <div>
-    <span class="label">Nationality: </span><?php print $officerDetails['nationality'] ?>
+    <span class="label">Nationality: </span><?php print $officer_details['nationality'] ?>
   </div>
 </div>
 
 <!-- Address -->
 <div>
   <span class="label">Address:</span>
-  <?php if (is_array($officerDetails['address']['line'])): ?>
-    <?php foreach($officerDetails['address']['line'] AS $line): ?>
+  <?php if (is_array($officer_details['address']['line'])): ?>
+    <?php foreach($officer_details['address']['line'] AS $line): ?>
       <div>
         <?php print $line ?>
       </div>
     <?php endforeach; ?>
   <?php else: ?>
   <div>
-    <?php print $officerDetails['address']['line'] ?>
+    <?php print $officer_details['address']['line'] ?>
   </div>
   <?php endif; ?>
   <div>
-    <?php print $officerDetails['address']['posttown'] ?>
+    <?php print $officer_details['address']['posttown'] ?>
   </div>
   <div>
-    <?php print $officerDetails['address']['postcode'] ?>
+    <?php print $officer_details['address']['postcode'] ?>
   </div>
 </div>
 
 <!-- Companies -->
 <div>
   <h3>Companies</h3>
-  <?php foreach ($officerDetails['company'] AS $company_details): ?>
+  <?php foreach ($officer_details['company'] AS $company_details): ?>
     <div>
       <div>
         <span class="label">Company number: </span><?php print $company_details['number'] ?>
@@ -87,10 +95,10 @@
 </div>
 
 <!-- Disqualifications -->
-<?php if (array_key_exists("disqualifcation", $officerDetails)): ?>
+<?php if (array_key_exists("disqualifcation", $officer_details)): ?>
   <div>
   <h3>Disqualifications</h3>
-  <?php foreach ($officerDetails['disqualifcation'] AS $disqualification): ?>
+  <?php foreach ($officer_details['disqualifcation'] AS $disqualification): ?>
     <div>
       <div>
         <span class="label">Reason: </span><?php print $disqualification['reason'] ?>
