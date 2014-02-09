@@ -38,7 +38,7 @@
     ?>
       <div class="appointment appointment-<?php print $index ?> <?php ($index % 2 == 0) ? print 'even' : print 'odd' ?>">
         <div>
-          <span class="label">Name: </span><a class="officer-details-link" href="/chxmlgw/gateway-history/user/<?php print $meta['user_id'] ?>"><?php print $appointment['title'] . ' ' . $appointment['forename'] . ' ' . $appointment['surname'] ?></a>
+          <span class="label">Name: </span><?php print l($appointment['title'] . ' ' . $appointment['forename'] . ' ' . $appointment['surname'], 'chxmlgw/gateway-history/user/' . $meta['user_id'], array('attributes' => array('class' => array('officer-details-link')))); ?>
         </div>
         <?php if (!empty($appointment['honours'])): ?>
           <div>

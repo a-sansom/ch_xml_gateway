@@ -31,7 +31,7 @@
   </div>
   <?php if ($companyDetails['appointments'] == '1'): ?>
     <div>
-      <a href="/chxmlgw/appointments-search/<?php print $companyDetails['number'] ?>">(View appointments)</a>
+      <?php print l(t('(View appointments)'), 'chxmlgw/appointments-search/' . $companyDetails['number']); ?>
     </div>
   <?php endif; ?>
   <?php if (array_key_exists('registration_date', $companyDetails) && !empty($companyDetails['registration_date'])): ?>
@@ -148,5 +148,5 @@
 <?php endif; ?>
 
 <p>
-  <a href="/chxmlgw/company-details">Search again?</a>
+  <?php print l(t('Search again?'), 'chxmlgw/company-details'); ?>
 </p>

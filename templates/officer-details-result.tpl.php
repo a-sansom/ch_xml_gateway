@@ -131,5 +131,5 @@
 <?php endif; ?>
 
 <p>
-  <a href="/chxmlgw/officer-search">Search for another?</a>
+  <?php print l(t('Search for another?'), 'chxmlgw/officer-search'); ?>
 </p>

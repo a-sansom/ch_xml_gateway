@@ -1,5 +1,5 @@
 <p>
-  <?php print l('Back to your gateway history', 'chxmlgw/gateway-history/user/'. $meta['user_id']) ?>
+  <?php print l(t('Back to your gateway history'), 'chxmlgw/gateway-history/user/'. $meta['user_id']) ?>
 </p>
 <p>
   On <?php print $meta['query_timestamp'] ?>, you queried <?php print $meta['service_name'] ?> and it returned the following information:
@@ -19,7 +19,7 @@
     $index++;
 ?>
   <ul>
-    <li><a class="match non-exact non-exact-<?php print $index ?> <?php ($index % 2 == 0) ? print 'even' : print 'odd' ?>" href="/chxmlgw/gateway-history/user/<?php print $meta['user_id'] ?>"><?php print $company['name'] ?></a></li>
+    <li><?php print l($company['name'], 'chxmlgw/gateway-history/user/' . $meta['user_id'], array('attributes' => array('title' => '', 'class' => array('match', 'non-exact', 'non-exact-' . $index)))); ?></li>
   </ul>
 <?php endforeach; ?>
 </div>

@@ -1,5 +1,5 @@
 <p>
-  <?php print l('Back to your gateway history', 'chxmlgw/gateway-history/user/'. $meta['user_id']) ?>
+  <?php print l(t('Back to your gateway history'), 'chxmlgw/gateway-history/user/'. $meta['user_id']) ?>
 </p>
 <p>
   On <?php print $meta['query_timestamp'] ?>, you queried <?php print $meta['service_name'] ?> and it returned the following information:
@@ -13,7 +13,7 @@
     <div id="exact-match">
       <div class="appointment appointment-1 odd">
         <div>
-          <a class="officer-details-link" href="/chxmlgw/gateway-history/user/<?php print $meta['user_id'] ?>"><?php print $officerList['exact']['title'] . ' ' . $officerList['exact']['forename'] . ' ' . $officerList['exact']['surname']?></a>
+          <?php print l($officerList['exact']['title'] . ' ' . $officerList['exact']['forename'] . ' ' . $officerList['exact']['surname'], 'chxmlgw/gateway-history/user/' . $meta['user_id'], array('attributes' => array('class' => array('officer-details-link')))); ?>
         </div>
         <?php if (array_key_exists('dob', $officerList['exact']) && !empty($officerList['exact']['dob'])): ?>
           <div>
@@ -38,13 +38,13 @@
     <h3>Near matches</h3>
     <div id="near-matches">
       <?php
-        $index = 1; // 'Exact match' is always goinbg to be appointment-1    
+        $index = 1; // 'Exact match' is always going to be appointment-1    
         foreach ($officerList['match'] AS $officer):
           $index++;
       ?>
       <div class="appointment appointment-<?php print $index ?> <?php ($index % 2 == 0) ? print 'even' : print 'odd' ?>">
         <div>
-          <a class="officer-details-link" href="/chxmlgw/gateway-history/user/<?php print $meta['user_id'] ?>"><?php print $officer['title'] . ' ' . $officer['forename'] . ' ' . $officer['surname'] ?></a>
+          <?php print l($officer['title'] . ' ' . $officer['forename'] . ' ' . $officer['surname'], 'chxmlgw/gateway-history/user/' . $meta['user_id'], array('attributes' => array('class' => array('officer-details-link')))); ?>
         </div>
         <?php if (array_key_exists('dob', $officer) && !empty($officer['dob'])): ?>
           <div>

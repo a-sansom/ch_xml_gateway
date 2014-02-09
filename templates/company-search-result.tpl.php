@@ -7,7 +7,7 @@
 <?php if (count($companyList['exact']) > 0): ?>
 <h3>Exact match:</h3>
 <div>
-  <a class="match exact" href="/chxmlgw/company-details/<?php print $companyList['exact']['number'] ?>" title="View more details"><?php print $companyList['exact']['name'] ?></a>
+  <?php print l($companyList['exact']['name'], 'chxmlgw/company-details/' . $companyList['exact']['number'], array('attributes' => array('title' => t('View more details'), 'class' => array('match', 'exact')))); ?>
 </div>
 <?php endif; ?>
 
@@ -18,12 +18,11 @@
   foreach ($companyList['match'] as $company): 
     $index++;
 ?>
-  <ul>
-    <li><a class="match non-exact non-exact-<?php print $index ?> <?php ($index % 2 == 0) ? print 'even' : print 'odd' ?>" href="/chxmlgw/company-details/<?php print $company['number'] ?>" title="View more details"><?php print $company['name'] ?></a></li>
+    <li><?php print l($company['name'], 'chxmlgw/company-details/' . $company['number'], array('attributes' => array('title' => t('View more details'), 'class' => array('match', 'non-exact', 'non-exact-' . $index)))); ?></li>
   </ul>
 <?php endforeach; ?>
 </div>
 
 <p>
-  <a href="/chxmlgw/company-search">Search again?</a>
+  <?php print l(t('Search again?'), 'chxmlgw/company-search'); ?>
 </p>

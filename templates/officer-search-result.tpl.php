@@ -9,7 +9,7 @@
   <?php if (count($officerList['match']) > 0): ?>
     <!-- Placeholder to hold dynamic appointments content -->
     <div id="selected-appointment-detail"></div>
-  
+
     <div id="search-results-matches">
       <!-- Nearest match is returned in $officerList['exact'] -->
       <?php if(array_key_exists("exact", $officerList)): ?>
@@ -17,7 +17,7 @@
       <div id="exact-match">
         <div class="appointment appointment-1 odd">
           <div>
-            <a class="officer-details-link" href="/chxmlgw/officer-details/<?php print base64_encode($officerList['exact']['id']) ?>" title="See more detailed information about this person"><?php print $officerList['exact']['title'] . ' ' . $officerList['exact']['forename'] . ' ' . $officerList['exact']['surname']?></a>
+            <?php print l($officerList['exact']['title'] . ' ' . $officerList['exact']['forename'] . ' ' . $officerList['exact']['surname'], 'chxmlgw/officer-details/' . base64_encode($officerList['exact']['id']), array('attributes' => array('title' => t('See more detailed information about this person'), 'class' => array('officer-details-link')))); ?>
           </div>
           <?php if (array_key_exists('dob', $officerList['exact']) && !empty($officerList['exact']['dob'])): ?>
             <div>
@@ -48,7 +48,7 @@
         ?>
         <div class="appointment appointment-<?php print $index ?> <?php ($index % 2 == 0) ? print 'even' : print 'odd' ?>">
           <div>
-            <a class="officer-details-link" href="/chxmlgw/officer-details/<?php print base64_encode($officer['id']) ?>" title="See more detailed information about this person"><?php print $officer['title'] . ' ' . $officer['forename'] . ' ' . $officer['surname'] ?></a>
+            <?php print l($officer['title'] . ' ' . $officer['forename'] . ' ' . $officer['surname'], 'chxmlgw/officer-details/' . base64_encode($officer['id']), array('attributes' => array('title' => t('See more detailed information about this person'), 'class' => array('officer-details-link')))); ?>
           </div>
           <?php if (array_key_exists('dob', $officer) && !empty($officer['dob'])): ?>
             <div>
@@ -77,5 +77,5 @@
 <?php endif; ?>
 
 <p>
-  <a href="/chxmlgw/officer-search">Search again?</a>
+  <?php print l(t('Search again?'), 'chxmlgw/officer-search'); ?>
 </p>

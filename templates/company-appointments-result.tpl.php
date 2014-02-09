@@ -42,7 +42,7 @@
       <div class="appointment appointment-<?php print $index ?> <?php ($index % 2 == 0) ? print 'even' : print 'odd' ?>">
         <?php // Base 64 encode the officer id so various chars, such as '+', don't get URL encoded ?>
         <div>
-          <span class="label">Name: </span><a class="officer-details-link" href="/chxmlgw/officer-details/<?php print base64_encode($appointment['person_id']) ?>" title="See more detailed information about this person"><?php print $appointment['title'] . ' ' . $appointment['forename'] . ' ' . $appointment['surname'] ?></a>
+          <span class="label">Name: </span><?php print l($appointment['title'] . ' ' . $appointment['forename'] . ' ' . $appointment['surname'], 'chxmlgw/officer-details/' . base64_encode($appointment['person_id']), array('attributes' => array('title' => t('See more detailed information about this person'), 'class' => array('officer-details-link')))); ?>
         </div>
         <?php if (!empty($appointment['honours'])): ?>
           <div>
