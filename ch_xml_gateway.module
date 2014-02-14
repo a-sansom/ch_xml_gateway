@@ -1006,10 +1006,10 @@ function _officer_search_result_page() {
     // Add to Drupal.settings values to make available in client javascript.
     drupal_add_js(
       array(
-        'ch_xml_gateway' =>
+        'chXmlGateway' =>
         array(
-          'json_url_stub' => url('chxmlgw/json', array('absolute' => TRUE)),
-          'access_officer_details' => user_access('query officerdetails'),
+          'jsonUrlStub' => url('chxmlgw/json', array('absolute' => TRUE)),
+          'accessOfficerDetails' => user_access('query officerdetails'),
         ),
       ),
       'setting'
@@ -1166,10 +1166,10 @@ function _appointments_search_result_page($company_number = '') {
     // call JSON returning function(s)
     drupal_add_js(
       array(
-        'ch_xml_gateway' =>
+        'chXmlGateway' =>
         array(
-          'json_url_stub' => url('chxmlgw/json', array('absolute' => TRUE)),
-          'access_officer_details' => user_access('query officerdetails'),
+          'jsonUrlStub' => url('chxmlgw/json', array('absolute' => TRUE)),
+          'accessOfficerDetails' => user_access('query officerdetails'),
         ),
       ),
       'setting'
@@ -1371,7 +1371,7 @@ function ch_xml_gateway_query_officersearch($ch_obj, $surname = '', $forename = 
       $params
     );
 
-    $output['content']['#officerList'] = $officer_list;
+    $output['content']['#officer_list'] = $officer_list;
   }
   else {
     // @todo Pass any /GovTalkMessage/GovTalkDetails/GovTalkErrors/* info into
@@ -1404,7 +1404,7 @@ function ch_xml_gateway_query_officerdetails($ch_obj, $person_id, $format = 'htm
       $output = json_encode($officer_details);
     }
     else {
-      $output['content']['#officerDetails'] = $officer_details;
+      $output['content']['#officer_details'] = $officer_details;
     }
   }
   else {
@@ -1446,15 +1446,15 @@ function _valid_company_number($number) {
  */
 function _format_officer_forename($name = '') {
   $forename = '';
-  if (is_array($name['forename'])) {
-    foreach ($name['forename'] as $name) {
-      $forename .= $name . ' ';
+  if (is_array($name)) {
+    foreach ($name['forename'] as $part) {
+      $forename .= $part . ' ';
     }
 
     $forename = rtrim($forename);
   }
   else {
-    $forename = $name['forename'];
+    $forename = $name;
   }
 
   return $forename;
