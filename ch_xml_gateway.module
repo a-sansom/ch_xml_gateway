@@ -930,7 +930,7 @@ function _search_form_options_page() {
  *   Markup containing form.
  */
 function _company_search_page() {
-  drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/ch_xml_gateway-default.css', 'module', 'all', TRUE);
+  drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/css/ch_xml_gateway-default.css', 'module', 'all', TRUE);
   $form = drupal_get_form('_company_search_form');
 
   $output['content'] = array(
@@ -949,7 +949,7 @@ function _company_search_page() {
  *   Markup showing a set of search results.
  */
 function _company_search_result_page($company_name) {
-  drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/ch_xml_gateway-default.css', 'module', 'all', TRUE);
+  drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/css/ch_xml_gateway-default.css', 'module', 'all', TRUE);
   $output = _query_gateway('NameSearch', 'html', '', NULL, '', check_plain($company_name));
 
   return $output;
@@ -963,7 +963,7 @@ function _company_search_result_page($company_name) {
  *   Render array containing the officer search form.
  */
 function _officer_search_page() {
-  drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/ch_xml_gateway-default.css', 'module', 'all', TRUE);
+  drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/css/ch_xml_gateway-default.css', 'module', 'all', TRUE);
   $form = drupal_get_form(
     '_officer_search_form',
     array(
@@ -997,7 +997,7 @@ function _officer_search_result_page() {
   $output = array();
   $forenames = '';
   $town = '';
-  drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/ch_xml_gateway-default.css', 'module', 'all', TRUE);
+  drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/css/ch_xml_gateway-default.css', 'module', 'all', TRUE);
   $use_ajax = variable_get('ch_xml_gateway_form_settings_all_ajax_searches', 0);
 
   if ($use_ajax) {
@@ -1072,7 +1072,7 @@ function _officer_search_result_page() {
  *   Renderable array to search for commpany details (by company number).
  */
 function _company_details_page() {
-  drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/ch_xml_gateway-default.css', 'module', 'all', TRUE);
+  drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/css/ch_xml_gateway-default.css', 'module', 'all', TRUE);
   $form = drupal_get_form('_company_details_form');
   $output['content'] = array(
     '#theme' => 'company_details_page',
@@ -1091,7 +1091,7 @@ function _company_details_page() {
  */
 function _company_details_result_page($company_number = '') {
   $output = '';
-  drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/ch_xml_gateway-default.css', 'module', 'all', TRUE);
+  drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/css/ch_xml_gateway-default.css', 'module', 'all', TRUE);
   if (_valid_company_number(trim($company_number))) {
     $output = _query_gateway('CompanyDetails', 'html', trim($company_number), NULL, '', '');
   }
@@ -1110,7 +1110,7 @@ function _company_details_result_page($company_number = '') {
  *   Markup containing the results of a search for a single officer.
  */
 function _officer_details_page($officer_id) {
-  drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/ch_xml_gateway-default.css', 'module', 'all', TRUE);
+  drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/css/ch_xml_gateway-default.css', 'module', 'all', TRUE);
   $output = _query_gateway('OfficerDetails', 'html', '', NULL, base64_decode($officer_id), '');
 
   return $output;
@@ -1138,7 +1138,7 @@ function _officer_details_json($officer_id) {
  *   number.
  */
 function _company_appointments_search_page() {
-  drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/ch_xml_gateway-default.css', 'module', 'all', TRUE);
+  drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/css/ch_xml_gateway-default.css', 'module', 'all', TRUE);
   $form = drupal_get_form('_appointments_search_form');
   $output['content'] = array(
     '#theme' => 'company_appointments_search_page',
@@ -1157,7 +1157,7 @@ function _company_appointments_search_page() {
  */
 function _appointments_search_result_page($company_number = '') {
   $output = '';
-  drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/ch_xml_gateway-default.css', 'module', 'all', TRUE);
+  drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/css/ch_xml_gateway-default.css', 'module', 'all', TRUE);
   $use_ajax = variable_get('ch_xml_gateway_form_settings_all_ajax_searches', 0);
   if ($use_ajax) {
     drupal_add_library('system', 'ui.dialog');
@@ -1602,7 +1602,7 @@ function _user_gateway_history_page($url_user_id) {
  *   Renderable array containing details of a previous gateway query.
  */
 function _gateway_previous_query_page($url_user_id = 0, $query_id = 0) {
-  drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/ch_xml_gateway-default.css', 'module', 'all', TRUE);
+  drupal_add_css(drupal_get_path('module', 'ch_xml_gateway') . '/css/ch_xml_gateway-default.css', 'module', 'all', TRUE);
   $page = array('content' => array());
   $query = 'SELECT * FROM {ch_xml_gateway_query} ch WHERE id = :id AND uid = :user_id';
   $result = db_query($query, array(':id' => $query_id, ':user_id' => $url_user_id));
