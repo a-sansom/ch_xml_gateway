@@ -1002,7 +1002,7 @@ function _officer_search_result_page() {
 
   if ($use_ajax) {
     drupal_add_library('system', 'ui.dialog');
-    drupal_add_js(drupal_get_path('module', 'ch_xml_gateway') . '/ch_xml_gateway.js');
+    drupal_add_js(drupal_get_path('module', 'ch_xml_gateway') . '/js/ch_xml_gateway.js');
     // Add to Drupal.settings values to make available in client javascript.
     drupal_add_js(
       array(
@@ -1161,7 +1161,7 @@ function _appointments_search_result_page($company_number = '') {
   $use_ajax = variable_get('ch_xml_gateway_form_settings_all_ajax_searches', 0);
   if ($use_ajax) {
     drupal_add_library('system', 'ui.dialog');
-    drupal_add_js(drupal_get_path('module', 'ch_xml_gateway') . '/ch_xml_gateway.js');
+    drupal_add_js(drupal_get_path('module', 'ch_xml_gateway') . '/js/ch_xml_gateway.js');
     // Add a Drupal.settings value to client javascript to make it easier to
     // call JSON returning function(s)
     drupal_add_js(
