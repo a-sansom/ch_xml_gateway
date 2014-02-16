@@ -6,24 +6,41 @@
 
 
 /**
+ * Various form select control options.
+ */
+function ch_xml_gateway_admin_form_select_options($type = '') {
+  switch ($type) {
+    case 'true_false':
+      return array(
+        '1' => t('True'),
+        '0' => t('False'),
+      );
+      break;
+
+    case 'officer_type':
+      return array(
+        'DIS' => t('Disqualified Directors only'),
+        'LLP' => t('Limited Liability Partnerships'),
+        'CUR' => t('Not above'),
+        'EUR' => t('SE and ES appointments only'),
+      );
+      break;
+
+    default:
+      return array();
+      break;
+  }
+}
+
+
+/**
  * Admin form for settings that will affect the usage of the XML gateway.
  *
  * @return array
  *   Form defined as per the Drupal form API dictates.
  */
 function ch_xml_gateway_settings_form() {
-  // select/radio control options.
-  $options_zero_or_one = array(
-    '1' => t('True'),
-    '0' => t('False'),
-  );
-
-  $options_officer_type = array(
-    'DIS' => t('Disqualified Directors only'),
-    'LLP' => t('Limited Liability Partnerships'),
-    'CUR' => t('Not above'),
-    'EUR' => t('SE and ES appointments only'),
-  );
+  $options_true_false = ch_xml_gateway_admin_form_select_options('true_false');
 
   // Gateway Login.
   $form['login'] = array(
@@ -81,7 +98,7 @@ function ch_xml_gateway_settings_form() {
     '#type' => 'radios',
     '#title' => t('GiveMortTotals'),
     '#default_value' => variable_get('ch_xml_gateway_CompanyDetails_GiveMortTotals', 0),
-    '#options' => $options_zero_or_one,
+    '#options' => $options_true_false,
     '#description' => t('Requests the return of the Mortgages element. Totals are only returned if applicable.'),
   );
 
@@ -97,7 +114,7 @@ function ch_xml_gateway_settings_form() {
     '#type' => 'radios',
     '#title' => t('IncludeResignedInd'),
     '#default_value' => variable_get('ch_xml_gateway_CompanyAppointments_IncludeResignedInd', 0),
-    '#options' => $options_zero_or_one,
+    '#options' => $options_true_false,
     '#description' => t('Indicates the status of appointments to be returned. True = All appointment types returned. False = Only current appointments returned.'),
   );
 
@@ -115,7 +132,7 @@ function ch_xml_gateway_settings_form() {
     '#type' => 'select',
     '#title' => t('OfficerType'),
     '#default_value' => variable_get('ch_xml_gateway_OfficerSearch_OfficerType', 'CUR'),
-    '#options' => $options_officer_type,
+    '#options' => ch_xml_gateway_admin_form_select_options('officer_type'),
     '#description' => t("'Not above == Current'"),
   );
 
@@ -123,7 +140,7 @@ function ch_xml_gateway_settings_form() {
     '#type' => 'radios',
     '#title' => t('IncludeResignedInd'),
     '#default_value' => variable_get('ch_xml_gateway_OfficerSearch_IncludeResignedInd', 0),
-    '#options' => $options_zero_or_one,
+    '#options' => $options_true_false,
     '#description' => t('Indicate whether resigned appointments should be returned. True = All appointment types returned. False = Only current appointments returned.'),
   );
 
@@ -164,10 +181,7 @@ function ch_xml_gateway_search_options_page() {
  *   Form defined as per the Drupal form API.
  */
 function chxml_gateway_search_options_form() {
-  $options_zero_or_one = array(
-    '1' => t('True'),
-    '0' => t('False'),
-  );
+  $options_true_false = ch_xml_gateway_admin_form_select_options('true_false');
 
   $form['all_searches'] = array(
     '#type' => 'fieldset',
@@ -181,8 +195,10 @@ function chxml_gateway_search_options_form() {
     '#type' => 'radios',
     '#title' => t('Use AJAX (where implemented)?'),
     '#default_value' => variable_get('ch_xml_gateway_form_settings_all_ajax_searches', 0),
-    '#options' => $options_zero_or_one,
-    '#description' => t('Show OfficerDetails results in the same page as results of CompanyAppointments or OfficerSearch with AJAX, where there is browser capability?'),
+    '#options' => $options_true_false,
+    '#description' => t('Show OfficerDetails results in the same page as results
+       of CompanyAppointments or OfficerSearch with AJAX, where there is browser
+       capability?'),
   );
 
   $form['company_details_page'] = array(
@@ -218,8 +234,9 @@ function chxml_gateway_search_options_form() {
     '#type' => 'radios',
     '#title' => t('Use single name input control?'),
     '#default_value' => variable_get('ch_xml_gateway_form_settings_OfficerSearch_single_name_input', 0),
-    '#options' => $options_zero_or_one,
-    '#description' => t("If 'True' then follwoing name control option will be ignored."),
+    '#options' => $options_true_false,
+    '#description' => t("If 'True' then follwoing name control option will be
+      ignored."),
   );
 
   // ...or use multiple inputs.
@@ -227,30 +244,34 @@ function chxml_gateway_search_options_form() {
     '#type' => 'radios',
     '#title' => t("Show second 'Forename' control"),
     '#default_value' => variable_get('ch_xml_gateway_form_settings_OfficerSearch_show_all_forename', 0),
-    '#options' => $options_zero_or_one,
+    '#options' => $options_true_false,
   );
 
   $form['officer_search_page']['ch_xml_gateway_form_settings_OfficerSearch_show_town'] = array(
     '#type' => 'radios',
     '#title' => t("Show 'Town' control"),
     '#default_value' => variable_get('ch_xml_gateway_form_settings_OfficerSearch_show_town', 0),
-    '#options' => $options_zero_or_one,
+    '#options' => $options_true_false,
   );
 
   $form['officer_search_page']['ch_xml_gateway_form_settings_OfficerSearch_show_officer_type'] = array(
     '#type' => 'radios',
     '#title' => t("Show 'Type' control"),
     '#default_value' => variable_get('ch_xml_gateway_form_settings_OfficerSearch_show_officer_type', 0),
-    '#options' => $options_zero_or_one,
-    '#description' => t("If this is set to 'False', the default value set for OfficerSearch -> OfficerType on the 'Gateway Options' page is used in the form."),
+    '#options' => $options_true_false,
+    '#description' => t("If this is set to 'False', the default value set for
+      OfficerSearch -> OfficerType on the 'Gateway Options' page is used in the
+      form."),
   );
 
   $form['officer_search_page']['ch_xml_gateway_form_settings_OfficerSearch_show_include_resigned'] = array(
     '#type' => 'radios',
     '#title' => t("Show 'Include resigned appointments?' control"),
     '#default_value' => variable_get('ch_xml_gateway_form_settings_OfficerSearch_show_include_resigned', 0),
-    '#options' => $options_zero_or_one,
-    '#description' => t("If this is set to 'False', the default value set for OfficerSearch -> IncludeResignedInd on the 'Gateway Options' page is used in the form."),
+    '#options' => $options_true_false,
+    '#description' => t("If this is set to 'False', the default value set for
+      OfficerSearch -> IncludeResignedInd on the 'Gateway Options' page is used
+      in the form."),
   );
 
   return system_settings_form($form);
