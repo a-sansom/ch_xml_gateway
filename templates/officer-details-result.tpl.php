@@ -110,7 +110,7 @@
           <div>
             <span class="label">End date: </span><?php print date('d/m/Y', $disqualification['end']) ?>
           </div>
-        
+
           <?php if (array_key_exists("exemption", $disqualification)): ?>
             <div>
               <h4>Exemptions</h4>
@@ -123,7 +123,7 @@
                     <span class="label">Company number: </span><?php print $exemption['number'] ?>
                   </div>
                   <div>
-                    <span class="label"Start date: </span><?php print date('d/m/Y', $exemption['start']) ?>
+                    <span class="label">Start date: </span><?php print date('d/m/Y', $exemption['start']) ?>
                   </div>
                   <div>
                     <span class="label">End date: </span><?php print date('d/m/Y', $exemption['end']) ?>
