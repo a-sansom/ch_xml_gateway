@@ -1,11 +1,48 @@
 <?php 
 /**
  * @file
- * Template to display results of a CompanyAppointments search.
+ * Display results of a CompanyAppointments search.
+ *
+ * Available variables:
+ * - $error: Error message indicating that the gateway search failed.
+ * - $company_appointments: Array of company information from gateway search containing:
+ * - $company_appointments['company_name']: Company appointment is for.
+ * - $company_appointments['company_number']: Company number of the company that appointment is for.
+ * - $company_appointments['has_inconsistencies']: Indicates that the Companies House company record is marked as having inconsistencies.
+ * - $company_appointments['num_current_appt']: Number of appointments that the company has.
+ * - $company_appointments['search_rows']:
+ * - $company_appointments['continuation_key']:
+ * - $company_appointments['appointments']: Array of appointment(s) information, including:
+ * - $appointment['index']: One-based index value.
+ * - $appointment['title']: Appointment title.
+ * - $appointment['forename']: Appointment first name.
+ * - $appointment['surname']: Appointment last name.
+ * - $appointment['person_id']: Appointment Companies House identifier.
+ * - $appointment['person_id_base64']: Base 64 encoded person_id. For use in links.
+ * - $appointment['honours']:
+ * - $appointment['dob']: Appointment date of birth.
+ * - $appointment['nationality']: Appointment nationality.
+ * - $appointment['country_of_residence']: Appointment country of residence.
+ * - $appointment['occupation']: Appointment occupation.
+ * - $appointment['appointment_date']: Date of appointment.
+ * - $appointment['appointment_date_prefix']:
+ * - $appointment['resignation_date']: Date of appointment resignation, if applicable.
+ * - $appointment['appointment_type']: Type of appointment. Director/Secretary etc.
+ * - $appointment['appointment_status']: Appointment status indicator.
+ * - $appointment['number_of_appointments']: Number of appointments held by person.
+ * - $appointment['address']['care_of']: Appointment address detail.
+ * - $appointment['address']['po_box']: Appointment address detail.
+ * - $appointment['address']['address_line']: Appointment address detail.
+ * - $appointment['address']['post_town']: Appointment address detail.
+ * - $appointment['address']['county']: Appointment address detail.
+ * - $appointment['address']['country']: Appointment address detail.
+ * - $appointment['address']['postcode']: Appointment address detail.
+ *
+ * @see template_preprocess_company_appointments_result().
+ *
+ * @ingoup themeable
  */
 ?>
-
-
 <?php if ($error): ?>
  <p>
    Error: <?php print $error ?>
@@ -14,11 +51,10 @@
 
 <?php if ($company_appointments): ?>
 <div id="search-results">
-  <!-- Placeholder to hold dynamic appointments content -->
+  <!-- Placeholder for dynamic appointments -->
   <div id="selected-appointment-detail"></div>
-  
+
   <div id="search-results-matches">
-    <!-- Meta info -->
     <div id="search-results-meta">
       <div>
         Company name: <?php print $company_appointments['company_name'] ?>
@@ -40,17 +76,11 @@
       </div>
     </div>
 
-    <!-- Actual appointment info -->
     <div id="company-appointments">
-    <?php
-      $index = 0;
-      foreach ($company_appointments['appointments'] AS $appointment):
-        $index++;
-    ?>
-      <div class="appointment appointment-<?php print $index ?> <?php ($index % 2 == 0) ? print 'even' : print 'odd' ?>">
-        <?php // Base 64 encode the officer id so various chars, such as '+', don't get URL encoded ?>
+    <?php foreach ($company_appointments['appointments'] AS $appointment): ?>
+      <div class="appointment appointment-<?php print $appointment['index'] ?> <?php ($appointment['index'] % 2 == 0) ? print 'even' : print 'odd' ?>">
         <div>
-          <span class="label">Name: </span><?php print l($appointment['title'] . ' ' . $appointment['forename'] . ' ' . $appointment['surname'], 'chxmlgw/officer-details/' . base64_encode($appointment['person_id']), array('attributes' => array('title' => t('See more detailed information about this person'), 'class' => array('officer-details-link')))); ?>
+          <span class="label">Name: </span><?php print l($appointment['title'] . ' ' . $appointment['forename'] . ' ' . $appointment['surname'], 'chxmlgw/officer-details/' . $appointment['person_id_base64'], array('attributes' => array('title' => t('See more detailed information about this person'), 'class' => array('officer-details-link')))); ?>
         </div>
         <?php if (!empty($appointment['honours'])): ?>
           <div>
@@ -87,7 +117,7 @@
           </div>
         <?php endif; ?>
         <?php if (!empty($appointment['appointment_type'])): ?>
-          <div>  
+          <div>
             <span class="label">Appointment type: </span><?php print $appointment['appointment_type'] ?>
           </div>
         <?php endif; ?>
@@ -99,6 +129,16 @@
         </div>
         <div>
           <span>Address:</span>
+          <?php if (!empty($appointment['address']['care_of'])): ?>
+          <div>
+            <?php print $appointment['address']['care_of'] ?>
+          </div>
+          <?php endif; ?>
+          <?php if (!empty($appointment['address']['po_box'])): ?>
+          <div>
+            <?php print $appointment['address']['po_box'] ?>
+          </div>
+          <?php endif; ?>
           <div>
             <?php print $appointment['address']['address_line'] ?>
           </div>
