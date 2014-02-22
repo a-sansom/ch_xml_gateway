@@ -1105,7 +1105,6 @@ function ch_xml_gateway_query_officerdetails($ch_obj, $person_id, $format = 'htm
   );
 
   if ($officer_details = $ch_obj->officerDetails($person_id, 'example.com')) {
-    $officer_details['formatted_forename'] = _format_officer_forename($officer_details['forename']);
     _log_gateway_access($officer_details, $ch_obj->getErrors(), 'OfficerDetails', array('person_id' => $person_id));
     if ($format == 'json') {
       $output = json_encode($officer_details);
@@ -1526,4 +1525,14 @@ function template_preprocess_company_appointments_result(&$variables) {
   }
 
   $variables['company_appointments']['appointments'] = $appointments;
+}
+
+
+/**
+ * Preprocess officer details result template variables.
+ *
+ * @see templates/officer-details-result.tpl.php.
+ */
+function template_preprocess_officer_details_result(&$variables) {
+  $variables['officer_details']['formatted_forename'] = _format_officer_forename($variables['officer_details']['forename']);
 }
