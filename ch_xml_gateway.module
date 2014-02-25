@@ -1536,3 +1536,28 @@ function template_preprocess_company_appointments_result(&$variables) {
 function template_preprocess_officer_details_result(&$variables) {
   $variables['officer_details']['formatted_forename'] = _format_officer_forename($variables['officer_details']['forename']);
 }
+
+
+/**
+ * Preprocess officer search result template variables.
+ *
+ * @see templates/officer-search-result.tpl.php.
+ */
+function template_preprocess_officer_search_result(&$variables) {
+  if (isset($variables['officer_list']['exact'])) {
+    $variables['officer_list']['exact']['id_base64'] = base64_encode($variables['officer_list']['exact']['id']);
+  }
+
+  if ($variables['officer_list']['match']) {
+    $officers = $variables['officer_list']['match'];
+
+    for ($i = 0, $len = count($officers); $i < $len; $i++) {
+      $officers[$i]['index'] = ($i + 1);
+      // Base 64 encode the officer id so various chars, such as '+', don't get
+      // URL encoded when used in links
+      $officers[$i]['id_base64'] = base64_encode($officers[$i]['id']);
+    }
+
+    $variables['officer_list']['match'] = $officers;
+  }
+}
