@@ -91,5 +91,3 @@ php-xml with:
 
 yum install php-xml (or equivalent for your platform)
 
-My development environment was with Drupal 7.12 and PHP 5.3.10 (and also
-tested with 5.2.9-2) on Win XP/Vista.
