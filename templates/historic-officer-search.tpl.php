@@ -78,3 +78,4 @@
     No matches
   </div>
 <?php endif; ?>
+</div>
