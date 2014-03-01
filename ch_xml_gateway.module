@@ -275,19 +275,19 @@ function ch_xml_gateway_block_view($delta = '') {
   if ($delta === 'ch-xml-gateway-company-search') {
     if (user_access('query namesearch')) {
       $block['subject'] = t('NameSearch');
-      $block['content'] = drupal_get_form('_company_search_form');
+      $block['content'] = drupal_get_form('_company_search_form', TRUE);
     }
   }
   elseif ($delta === 'ch-xml-gateway-company-details') {
     if (user_access('query companydetails')) {
       $block['subject'] = t('CompanyDetails');
-      $block['content'] = drupal_get_form('_company_details_form');
+      $block['content'] = drupal_get_form('_company_details_form', TRUE);
     }
   }
   elseif ($delta === 'ch-xml-gateway-company-appts') {
     if (user_access('query companyappointments')) {
       $block['subject'] = t('CompanyAppointments');
-      $block['content'] = drupal_get_form('_appointments_search_form');
+      $block['content'] = drupal_get_form('_appointments_search_form', TRUE);
     }
   }
   elseif ($delta === 'ch-xml-gateway-officer-search') {
@@ -302,7 +302,7 @@ function ch_xml_gateway_block_view($delta = '') {
       );
 
       $block['subject'] = t('OfficerSearch');
-      $block['content'] = drupal_get_form('_officer_search_form', $params);
+      $block['content'] = drupal_get_form('_officer_search_form', $params, TRUE);
     }
   }
 
@@ -330,13 +330,13 @@ function ch_xml_gateway_user_view($account, $view_mode, $langcode) {
  * @return array
  *   Form as per the Drupal form API.
  */
-function _company_search_form($form, &$form_state) {
+function _company_search_form($form, &$form_state, $block_display = FALSE) {
   $form['alpha_key'] = array(
     '#type' => 'textfield',
     '#title' => t('Company name'),
     '#required' => TRUE,
     '#default_value' => '',
-    '#size' => 30,
+    '#size' => $block_display ? 15 : 30,
     '#maxlength' => 160,
     '#description' => 'Enter a company name that you would like to find.',
   );
@@ -365,13 +365,13 @@ function _company_search_form_submit($form, &$form_state) {
  * @return array
  *   Form as per the Drupal form API.
  */
-function _appointments_search_form($form, &$form_state) {
+function _appointments_search_form($form, &$form_state, $block_display = FALSE) {
   $form['company_number'] = array(
     '#type' => 'textfield',
     '#title' => t('Company number'),
     '#required' => TRUE,
     '#default_value' => '',
-    '#size' => 30,
+    '#size' => $block_display ? 15 : 30,
     '#maxlength' => 8,
     '#description' => '',
   );
@@ -414,13 +414,13 @@ function _appointments_search_form_submit($form, &$form_state) {
  * @return array
  *   Form as per the Drupal form API.
  */
-function _company_details_form($form, &$form_state) {
+function _company_details_form($form, &$form_state, $block_display = FALSE) {
   $form['company_number'] = array(
     '#type' => 'textfield',
     '#title' => t('Company number'),
     '#required' => TRUE,
     '#default_value' => '',
-    '#size' => 30,
+    '#size' => $block_display ? 15 : 30,
     '#maxlength' => 8,
     '#description' => 'The 8 character registered companies house number of
       the company you want to know more about, eg. 03176906',
@@ -471,7 +471,7 @@ function _company_details_form_submit($form, &$form_state) {
  * @return array
  *   Form defined as per the Drupal form API.
  */
-function _officer_search_form($form, &$form_state, $form_options = array('form_instructions' => '', 'single_name' => 1, 'show_all_forename' => 1, 'show_town' => 1, 'show_officer_type' => 1, 'show_resigned_ind' => 1)) {
+function _officer_search_form($form, &$form_state, $form_options = array('form_instructions' => '', 'single_name' => 1, 'show_all_forename' => 1, 'show_town' => 1, 'show_officer_type' => 1, 'show_resigned_ind' => 1), $block_display = FALSE) {
   // select/radio control options.
   $options_zero_or_one = array(
     '1' => t('True'),
@@ -500,7 +500,7 @@ function _officer_search_form($form, &$form_state, $form_options = array('form_i
       '#title' => t('Name'),
       '#required' => TRUE,
       '#default_value' => '',
-      '#size' => 30,
+      '#size' => $block_display ? 15 : 30,
       '#maxlength' => 250,
     );
   }
