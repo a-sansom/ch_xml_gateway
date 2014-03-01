@@ -122,7 +122,7 @@
                 <span class="label">Company number: </span><?php print $exemption['number'] ?>
               </div>
               <div>
-                <span class="label"Start date: </span><?php print date('d/m/Y', $exemption['start']) ?>
+                <span class="label">Start date: </span><?php print date('d/m/Y', $exemption['start']) ?>
               </div>
               <div>
                 <span class="label">End date: </span><?php print date('d/m/Y', $exemption['end']) ?>
