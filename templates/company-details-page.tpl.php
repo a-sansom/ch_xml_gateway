@@ -2,6 +2,11 @@
 /**
  * @file
  * Template to display search for companies form.
+ *
+ * Available variables:
+ * - $form: Form allowing search of companies by company number.
+ *
+ * @ingoup themeable
  */
 ?>
 

@@ -1,11 +1,44 @@
-<?php 
+<?php
 /**
  * @file
  * Template to display results of a company search.
+ *
+ * Available variables:
+ * - $error: Error message indicating that the gateway search failed.
+ * - $company_details: Array of company information containing:
+ * - $company_details['name']: Comapny name
+ * - $company_details['number']: Companies House company number.
+ * - $company_details['category']: PLC etc.
+ * - $company_details['status']: Company status.
+ * - $company_details['liquidation']: Flag if company is in liquidation.
+ * - $company_details['branchinfo']:
+ * - $company_details['appointments']: Flag if company has appointments.
+ * - $company_details['registration_date']: Date registered at Companies House.
+ * - $company_details['dissolution_date']: Date of dissolution, if relevant.
+ * - $company_details['incorporation_date']: Date of incorporation.
+ * - $company_details['closure_date']: Date of closure, if relevant.
+ * - $company_details['accounts']['overdue']:
+ * - $company_details['accounts']['document']:
+ * - $company_details['accounts']['reference_date']:
+ * - $company_details['accounts']['due_date']:
+ * - $company_details['accounts']['last_madeup']:
+ * - $company_details['accounts']['category']: Types of accounts filed.
+ * - $company_details['returns']['overdue']:
+ * - $company_details['returns']['document']:
+ * - $company_details['returns']['due_date']:
+ * - $company_details['returns']['last_madeup']:
+ * - $company_details['mortgage']['register']:
+ * - $company_details['mortgage']['charges']: No. of charges registered against company.
+ * - $company_details['mortgage']['outstanding']: No. of outstanding charges registered against company.
+ * - $company_details['mortgage']['part_satisfied']: No. of part satisfied charges registered against company.
+ * - $company_details['mortgage']['fully_satisfied']: No. of satisfied charges registered against company.
+ * - $company_details['previous_name']: Array of previous company names.
+ * - $company_details['address']: Array of address info.
+ * - $company_details['sic_code']: Array of SIC codes.
+ *
+ * @ingoup themeable
  */
 ?>
-
-
 <?php if ($error): ?>
   <p>
     Error: <?php print $error ?>
@@ -158,3 +191,4 @@
 <p>
   <?php print l(t('Search again?'), 'chxmlgw/company-details'); ?>
 </p>
+
